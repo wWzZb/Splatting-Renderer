@@ -117,6 +117,7 @@ initRouter()
 - routes.json ：定义URL路径与资产ID的映射关系
 
 ## 项目结构
+```
 ├── config/           # 配置文件目录
 │   ├── assets.json   # 资产配置信息
 │   └── routes.json   # 路由映射配置
@@ -136,3 +137,4 @@ initRouter()
 ├── router.ts         # 路由系统
 ├── stores.ts         # 状态管理
 └── index.html        # 主页面
+```
