@@ -1,0 +1,172 @@
+{
+  "1": {
+    "gsplatUrl": "splatting/1完成.ply",
+    "skyboxUrl": "cube/empty-room.hdr",
+    "scale": 0.6,
+    "additionalInfo": {
+      "description": "基础模型展示，适合作为示例和测试用例，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
+      "author": "曾慧玲",
+      "organization": "人工智能创作坊",
+      "date": "2025-10-15",
+      "category": "示例模型",
+      "tags": [
+        "基础",
+        "测试",
+        "示例"
+      ]
+    }
+  },
+  "2": {
+    "gsplatUrl": "splatting/2完成.ply",
+    "skyboxUrl": "cube/FN_HDRI_029.hdr",
+    "scale": 1,
+    "additionalInfo": {
+      "description": "城市街道场景模型，展示城市环境",
+      "author": "场景设计师",
+      "organization": "场景设计组",
+      "date": "2023-11-02",
+      "category": "城市场景",
+      "tags": [
+        "城市",
+        "街道",
+        "建筑"
+      ]
+    }
+  },
+  "3": {
+    "gsplatUrl": "splatting/3完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.6,
+    "additionalInfo": {
+      "description": "人物角色模型，用于演示动画和交互",
+      "author": "角色设计师",
+      "organization": "角色设计组",
+      "date": "2023-11-10",
+      "category": "角色模型",
+      "tags": [
+        "人物",
+        "角色",
+        "动画"
+      ]
+    }
+  },
+  "4": {
+    "gsplatUrl": "splatting/4完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 1,
+    "additionalInfo": {
+      "description": "交通工具模型，展示精细机械结构",
+      "author": "机械设计师",
+      "organization": "机械设计组",
+      "date": "2023-11-15",
+      "category": "交通工具",
+      "tags": [
+        "车辆",
+        "机械",
+        "交通工具"
+      ]
+    }
+  },
+  "9": {
+    "gsplatUrl": "splatting/9完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.3,
+    "additionalInfo": {
+      "description": "小型道具模型，用于场景细节装饰",
+      "author": "道具设计师",
+      "organization": "道具设计组",
+      "date": "2023-12-05",
+      "category": "道具",
+      "tags": [
+        "小型",
+        "道具",
+        "装饰"
+      ]
+    }
+  },
+  "10": {
+    "gsplatUrl": "splatting/10完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.3,
+    "additionalInfo": {
+      "description": "室内场景组件，展示家居环境",
+      "author": "室内设计师",
+      "organization": "室内设计组",
+      "date": "2023-12-10",
+      "category": "室内场景",
+      "tags": [
+        "室内",
+        "家居",
+        "生活"
+      ]
+    }
+  },
+  "12": {
+    "gsplatUrl": "splatting/12完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.6,
+    "additionalInfo": {
+      "description": "自然环境模型，展示自然风光",
+      "author": "环境设计师",
+      "organization": "环境设计组",
+      "date": "2023-12-15",
+      "category": "自然环境",
+      "tags": [
+        "自然",
+        "风景",
+        "环境"
+      ]
+    }
+  },
+  "13": {
+    "gsplatUrl": "splatting/13完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.4,
+    "additionalInfo": {
+      "description": "特殊效果模型，展示视觉特效",
+      "author": "特效设计师",
+      "organization": "特效设计组",
+      "date": "2023-12-20",
+      "category": "特效",
+      "tags": [
+        "特效",
+        "视觉",
+        "粒子"
+      ]
+    }
+  },
+  "14": {
+    "gsplatUrl": "splatting/14完成.ply",
+    "skyboxUrl": "cube/wide-street.hdr",
+    "scale": 0.5,
+    "additionalInfo": {
+      "description": "抽象艺术模型，展示创意设计",
+      "author": "艺术设计师",
+      "organization": "艺术设计组",
+      "date": "2024-01-05",
+      "category": "艺术",
+      "tags": [
+        "抽象",
+        "艺术",
+        "创意"
+      ]
+    }
+  },
+  "15": {
+    "gsplatUrl": "splatting/15完成.ply",
+    "skyboxUrl": "cube/empty-room.hdr",
+    "scale": 0.5,
+    "additionalInfo": {
+      "description": "产品展示模型，用于商业展示",
+      "author": "产品设计师",
+      "organization": "产品设计组",
+      "date": "2024-01-10",
+      "category": "产品",
+      "tags": [
+        "商业",
+        "产品",
+        "展示"
+      ]
+    }
+  }
+}

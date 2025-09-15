@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body { margin: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);}
+            #container {
+                display: flex;
+                width: 100vw;
+                height: 100vh;
+            }
+
+            /* 左侧面板样式 - 占满整个左侧页面 */
+            #left-panel {
+                flex: 1;
+                height: 100vh;
+                background: rgba(255, 255, 255, 0.95);
+                padding: 30px;
+                box-sizing: border-box;
+                overflow-y: auto;
+                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
+                backdrop-filter: blur(10px);
+                display: flex;
+                flex-direction: column;
+            }
+            
+            #right-panel {
+                flex: 3;
+                height: 100vh;
+                position: relative;
+                background: #1a1a1a;
+            }
+            
+            #application {
+                width: 100%;
+                height: 100%;
+            }
+            
+            /* 资产信息容器样式 - 填充整个可用空间 */
+            #asset-info-container {
+                flex: 1;
+                margin-top: 20px;
+                padding: 24px;
+                background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
+                border-radius: 16px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+                transition: all 0.3s ease;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+                display: flex;
+                flex-direction: column;
+            }
+            
+            #asset-info-container:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+            }
+            
+            #asset-info-container h3 {
+                color: #2c3e50;
+                font-size: 20px;
+                font-weight: 600;
+                margin: 0 0 16px 0;
+                padding-bottom: 12px;
+                border-bottom: 2px solid #e1e8ed;
+                position: relative;
+            }
+            
+            #asset-info-container h3::after {
+                content: '';
+                position: absolute;
+                bottom: -2px;
+                left: 0;
+                width: 60px;
+                height: 2px;
+                background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+            }
+            
+            /* 资产描述样式 */
+            #asset-description {
+                color: #34495e;
+                font-size: 14px;
+                line-height: 1.6;
+                margin-bottom: 16px;
+                padding: 12px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                min-height: 40px;
+                border-left: 3px solid #4facfe;
+                flex-grow: 1;
+            }
+            
+            /* 资产作者样式 */
+            #asset-author {
+                color: #7f8c8d;
+                font-size: 13px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-style: italic;
+            }
+            
+            #asset-author::before {
+                content: '👤';
+                font-size: 16px;
+            }
+            
+            /* 资产组织样式 */
+            #asset-organization {
+                color: #7f8c8d;
+                font-size: 13px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-style: italic;
+            }
+            
+            #asset-organization::before {
+                content: '🏢';
+                font-size: 16px;
+            }
+            
+            /* 资产日期样式 */
+            #asset-date {
+                color: #7f8c8d;
+                font-size: 13px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                font-style: italic;
+            }
+            
+            #asset-date::before {
+                content: '📅';
+                font-size: 16px;
+            }
+            
+            /* 动画效果 */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            /* 按钮样式 */
+            .action-button {
+                padding: 12px 24px;
+                background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
+                margin-bottom: 20px;
+            }
+            
+            .action-button:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+            }
+            
+            .action-button:active {
+                transform: translateY(0);
+                box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+            }
+        </style>
+        <script type="module" src="main.ts"></script>
+    </head>
+    <body>
+        <div id="container">
+            <!-- 左侧面板 -->
+            <div id="left-panel">
+                <!-- 左侧内容 -->
+                 <!-- 添加按钮 -->
+                <button id="custom-action-btn" class="action-button">返回</button>
+                <!-- 资产信息标签容器 -->
+                <div id="asset-info-container" style="margin-top: 20px;">
+                    <h3>当前资产信息</h3>
+                    <div id="asset-description"></div>
+                    <div id="asset-author"></div>
+                    <div id="asset-organization"></div>
+                    <div id="asset-date"></div>
+                </div>
+            </div>
+            
+            <!-- 右侧面板 -->
+            <div id="right-panel">
+                <canvas id='application'></canvas>
+            </div>
+        </div>
+        
+    </body>
+</html>
