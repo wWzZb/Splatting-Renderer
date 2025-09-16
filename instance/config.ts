@@ -7,3 +7,5 @@ import routesData from '../config/routes.json';
 export const assets = assetsData;
 
 export const routeToAssetId = routesData.routeToAssetId;
+
+export const buttonToRuter = routesData.buttonToRuter;

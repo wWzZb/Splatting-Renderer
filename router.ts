@@ -1,6 +1,6 @@
 import page from 'page';
-import { routeToAssetId } from './instance/config'
-
+import { routeToAssetId, buttonToRuter } from './instance/config'
+import { setupButtonRouting } from './instance/button'
 
 
 /**
@@ -23,7 +23,7 @@ export function initRouter() {
 
     // 启动路由
     page();
-    setupButtonRouting()
+    setupButtonRouting(buttonToRuter)
 }
 
 /**
@@ -67,42 +67,7 @@ export function getAssetIdForPath(path: string): number {
     return routeToAssetId[path] || 1; // 默认返回第一个资产
 }
 
-
-/**
- * 设置按钮的路由功能
- */
-function setupButtonRouting() {
-    // 等待DOM加载完成
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => {
-            bindBackButton();
-        });
-    } else {
-        bindBackButton();
-    }
-}
-
-/**
- * 绑定返回按钮的点击事件
- */
-function bindBackButton() {
-    const backButton = document.getElementById('custom-action-btn');
-
-    if (!backButton) {
-        console.error('未找到ID为custom-action-btn的按钮元素');
-        return;
-    }
-
-    // 为按钮添加点击事件监听器
-    backButton.addEventListener('click', () => {
-        // 获取按钮上设置的目标路由，如果没有则默认返回首页
-        const targetRoute = backButton.getAttribute('data-route') || '/';
-
-        // 执行路由跳转
-        page(targetRoute);
-    });
-}
-
+//暂时没有用
 /**
  * 手动导航到指定路由
  * @param routePath 目标路由路径
