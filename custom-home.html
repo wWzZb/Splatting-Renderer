@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>作品展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: radial-gradient(ellipse at left, #e6f2ff 0%, #f0f8ff 40%, #ffffff 100%);
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .empty-area {
+            text-align: center;
+            margin-bottom: 40px;
+            color: #666;
+            font-size: 18px;
+        }
+
+        .year-section {
+            max-width: 1200px;
+            margin: 0 auto 60px auto;
+            max-height: 80vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background-color: rgba(249, 249, 249, 0.3); /* 使用RGBA设置半透明白色 */
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+            
+        .year {
+            font-size: 72px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 40px;
+            text-align: left;
+            position: relative;
+            display: inline-block;
+            /* 移除了居中相关的样式 */
+        }
+
+        /* 为"上"和"下"添加特殊样式 */
+        .year span {
+            font-size: 28px;
+            font-weight: normal;
+            margin-left: 15px;
+            padding: 8px 20px;
+            border-radius: 30px;
+            position: relative;
+            top: -12px;
+        }
+
+        .year span.upper {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+
+        .year span.lower {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            color: white;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 30px;
+            max-width: 1500px;
+            max-height: 1500px;
+            margin: 0 auto;
+            padding: 10px 0;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 200px;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-top {
+            height: 50%;
+            flex-shrink: 0;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .card-top::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+        }
+
+        .card:nth-child(1) .card-top { background-image: url('https://picsum.photos/id/1/400/300'); }
+        .card:nth-child(2) .card-top { background-image: url('https://picsum.photos/id/20/400/300'); }
+        .card:nth-child(3) .card-top { background-image: url('https://picsum.photos/id/42/400/300'); }
+        .card:nth-child(4) .card-top { background-image: url('https://picsum.photos/id/65/400/300'); }
+        .card:nth-child(5) .card-top { background-image: url('https://picsum.photos/id/91/400/300'); }
+        .card:nth-child(6) .card-top { background-image: url('https://picsum.photos/id/119/400/300'); }
+        .card:nth-child(7) .card-top { background-image: url('https://picsum.photos/id/152/400/300'); }
+        .card:nth-child(8) .card-top { background-image: url('https://picsum.photos/id/180/400/300'); }
+        .card:nth-child(9) .card-top { background-image: url('https://picsum.photos/id/210/400/300'); }
+        .card:nth-child(10) .card-top { background-image: url('https://picsum.photos/id/237/400/300'); }
+        .card:nth-child(11) .card-top { background-image: url('https://picsum.photos/id/260/400/300'); }
+        .card:nth-child(12) .card-top { background-image: url('https://picsum.photos/id/287/400/300'); }
+        .card:nth-child(13) .card-top { background-image: url('https://picsum.photos/id/312/400/300'); }
+        .card:nth-child(14) .card-top { background-image: url('https://picsum.photos/id/335/400/300'); }
+        .card:nth-child(15) .card-top { background-image: url('https://picsum.photos/id/350/400/300'); }
+
+        .card-bottom {
+            background-color: white;
+            height: 50%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .card-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .model-link {
+            text-decoration: none;
+            display: block;
+            height: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .year {
+                font-size: 48px;
+            }
+            
+            .year span {
+                font-size: 20px;
+                padding: 6px 16px;
+                top: -8px;
+            }
+            
+            .card {
+                height: 180px;
+            }
+            
+            .year-section {
+                padding: 30px 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cards-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="empty-area">这是head</div>
+    
+    <div class="year-section">
+        <div class="year">2025 <span class="upper">上</span></div>
+        <div class="cards-grid">
+            <a href="/1" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 1</div>
+                        <div class="card-description">点击查看模型 1</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/2" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 2</div>
+                        <div class="card-description">点击查看模型 2</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/3" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 3</div>
+                        <div class="card-description">点击查看模型 3</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/4" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 4</div>
+                        <div class="card-description">点击查看模型 4</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/5" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 5</div>
+                        <div class="card-description">点击查看模型 5</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/6" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 6</div>
+                        <div class="card-description">点击查看模型 6</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/7" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 7</div>
+                        <div class="card-description">点击查看模型 7</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/8" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 8</div>
+                        <div class="card-description">点击查看模型 8</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/9" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 9</div>
+                        <div class="card-description">点击查看模型 9</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/10" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 10</div>
+                        <div class="card-description">点击查看模型 10</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/11" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 11</div>
+                        <div class="card-description">点击查看模型 11</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/12" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 12</div>
+                        <div class="card-description">点击查看模型 12</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/13" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 13</div>
+                        <div class="card-description">点击查看模型 13</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/14" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 14</div>
+                        <div class="card-description">点击查看模型 14</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/15" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 15</div>
+                        <div class="card-description">点击查看模型 15</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+    
+    <div class="year-section">
+        <div class="year">2025 <span class="lower">下</span></div>
+        <div class="cards-grid">
+            <a href="/1" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 1</div>
+                        <div class="card-description">点击查看模型 1</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/2" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 2</div>
+                        <div class="card-description">点击查看模型 2</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/3" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 3</div>
+                        <div class="card-description">点击查看模型 3</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/4" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 4</div>
+                        <div class="card-description">点击查看模型 4</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/5" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 5</div>
+                        <div class="card-description">点击查看模型 5</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/6" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 6</div>
+                        <div class="card-description">点击查看模型 6</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/7" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 7</div>
+                        <div class="card-description">点击查看模型 7</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/8" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 8</div>
+                        <div class="card-description">点击查看模型 8</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/9" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 9</div>
+                        <div class="card-description">点击查看模型 9</div>
+                    </div>
+                </div>
+            </a>
+            
+            <a href="/10" class="model-link">
+                <div class="card">
+                    <div class="card-top"></div>
+                    <div class="card-bottom">
+                        <div class="card-title">模型 10</div>
+                        <div class="card-description">点击查看模型 10</div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+</body>
+</html>

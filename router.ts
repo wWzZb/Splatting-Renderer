@@ -13,7 +13,10 @@ export function initRouter() {
             handleRouteChange(path, assetId);
         });
     }
-
+    // 根路径重定向到自定义页面
+    page('/', () => {
+        window.location.href = '/custom-home.html';
+    });
     // 404 路由
     page('*', () => {
         console.error('未找到该路由');
