@@ -119,12 +119,14 @@ function initApp(config: any): pc.Application {
  */
 function updateAssetInfoDisplay(config: any): void {
     // 获取HTML中的元素
+    const nameElement = document.getElementById('asset-name');//TODO
+    const studentidElement = document.getElementById('asset-studentid');
     const descriptionElement = document.getElementById('asset-description');
     const authorElement = document.getElementById('asset-author');
     const dateElement = document.getElementById('asset-date');
     const organizationElement = document.getElementById('asset-organization');
     // 检查元素是否存在
-    if (!descriptionElement || !authorElement || !dateElement || !organizationElement) {
+    if (!descriptionElement || !authorElement || !dateElement || !organizationElement || !studentidElement) {
         console.warn('无法找到资产信息显示元素');
         return;
     }
@@ -136,12 +138,16 @@ function updateAssetInfoDisplay(config: any): void {
     if (config.additionalInfo) {
         if (config.additionalInfo.description) {
             // 显示描述信息
-            descriptionElement.textContent = `描述: ${config.additionalInfo.description || '无描述'}`;
+            descriptionElement.textContent = `${config.additionalInfo.description || '无描述'}`;
         }
 
         if (config.additionalInfo.author) {
             // 显示作者信息
             authorElement.textContent = `作者: ${config.additionalInfo.author || '未知'}`;
+        }
+        if (config.additionalInfo.studentId) {
+            // 显示学号信息
+            studentidElement.textContent = `学号: ${config.additionalInfo.studentId || '无信息'}`;
         }
         // 创建日期标签
         if (config.additionalInfo.date) {

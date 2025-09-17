@@ -1,19 +1,22 @@
 {
   "1": {
     "gsplatUrl": "splatting/1完成.ply",
-    "skyboxUrl": "cube/empty-room.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.6,
     "additionalInfo": {
-      "description": "基础模型展示，适合作为示例和测试用例，哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈",
-      "author": "曾慧玲",
-      "organization": "人工智能创作坊",
+      "description": "这款 3D 打印土楼作品，以福建客家土楼为原型，精准还原了其 “外圆内方” 的经典布局与环形夯土墙结构。细节处复刻了错落的檐角、拱形窗洞与中心祖堂轮廓，用打印层叠纹理模拟夯土质感，既保留传统建筑的厚重韵味，又以轻量化材质呈现土楼的对称美学，成为可触摸的非遗建筑缩影。",
+      "author": "宣洗楼",
+      "organization": "厦门工学院档案馆",
       "date": "2025-10-15",
       "category": "示例模型",
       "tags": [
         "基础",
         "测试",
         "示例"
-      ]
+      ],
+      "name": "3D打印作品-土楼",
+      "studentId": "202301001",
+      "instructor": "Professor Zhang"
     }
   },
   "2": {
@@ -30,7 +33,10 @@
         "城市",
         "街道",
         "建筑"
-      ]
+      ],
+      "name": "城市街道场景",
+      "studentId": "202301002",
+      "instructor": "Professor Li"
     }
   },
   "3": {
@@ -47,7 +53,10 @@
         "人物",
         "角色",
         "动画"
-      ]
+      ],
+      "name": "人物角色模型",
+      "studentId": "202301003",
+      "instructor": "Professor Wang"
     }
   },
   "4": {
@@ -64,10 +73,13 @@
         "车辆",
         "机械",
         "交通工具"
-      ]
+      ],
+      "name": "交通工具模型",
+      "studentId": "202301004",
+      "instructor": "Professor Chen"
     }
   },
-  "9": {
+  "5": {
     "gsplatUrl": "splatting/9完成.ply",
     "skyboxUrl": "cube/wide-street.hdr",
     "scale": 0.3,
@@ -81,10 +93,13 @@
         "小型",
         "道具",
         "装饰"
-      ]
+      ],
+      "name": "小型道具模型",
+      "studentId": "202301005",
+      "instructor": "Professor Liu"
     }
   },
-  "10": {
+  "6": {
     "gsplatUrl": "splatting/10完成.ply",
     "skyboxUrl": "cube/wide-street.hdr",
     "scale": 0.3,
@@ -98,10 +113,13 @@
         "室内",
         "家居",
         "生活"
-      ]
+      ],
+      "name": "室内场景组件",
+      "studentId": "202301006",
+      "instructor": "Professor Zhao"
     }
   },
-  "12": {
+  "7": {
     "gsplatUrl": "splatting/12完成.ply",
     "skyboxUrl": "cube/wide-street.hdr",
     "scale": 0.6,
@@ -115,10 +133,13 @@
         "自然",
         "风景",
         "环境"
-      ]
+      ],
+      "name": "自然环境模型",
+      "studentId": "202301007",
+      "instructor": "Professor Huang"
     }
   },
-  "13": {
+  "8": {
     "gsplatUrl": "splatting/13完成.ply",
     "skyboxUrl": "cube/wide-street.hdr",
     "scale": 0.4,
@@ -132,10 +153,13 @@
         "特效",
         "视觉",
         "粒子"
-      ]
+      ],
+      "name": "特殊效果模型",
+      "studentId": "202301008",
+      "instructor": "Professor Wu"
     }
   },
-  "14": {
+  "9": {
     "gsplatUrl": "splatting/14完成.ply",
     "skyboxUrl": "cube/wide-street.hdr",
     "scale": 0.5,
@@ -149,10 +173,13 @@
         "抽象",
         "艺术",
         "创意"
-      ]
+      ],
+      "name": "抽象艺术模型",
+      "studentId": "202301009",
+      "instructor": "Professor Zhou"
     }
   },
-  "15": {
+  "10": {
     "gsplatUrl": "splatting/15完成.ply",
     "skyboxUrl": "cube/empty-room.hdr",
     "scale": 0.5,
@@ -166,7 +193,10 @@
         "商业",
         "产品",
         "展示"
-      ]
+      ],
+      "name": "产品展示模型",
+      "studentId": "202301010",
+      "instructor": "Professor Xu"
     }
   }
 }

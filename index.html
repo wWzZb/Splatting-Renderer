@@ -3,8 +3,13 @@
     <head>
         <meta charset="utf-8">
         <style>
-            body { margin: 0; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);}
+            body { 
+                margin: 0; 
+                overflow: hidden; 
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+                background: white;
+                color: black;
+            }
             #container {
                 display: flex;
                 width: 100vw;
@@ -15,21 +20,20 @@
             #left-panel {
                 flex: 1;
                 height: 100vh;
-                background: rgba(255, 255, 255, 0.95);
+                background: white;
                 padding: 30px;
                 box-sizing: border-box;
                 overflow-y: auto;
-                box-shadow: 4px 0 20px rgba(0, 0, 0, 0.1);
-                backdrop-filter: blur(10px);
                 display: flex;
                 flex-direction: column;
+                border-right: 1px solid #e0e0e0;
             }
             
             #right-panel {
                 flex: 3;
                 height: 100vh;
                 position: relative;
-                background: #1a1a1a;
+                background: #f5f5f5;
             }
             
             #application {
@@ -40,62 +44,42 @@
             /* 资产信息容器样式 - 填充整个可用空间 */
             #asset-info-container {
                 flex: 1;
-                margin-top: 20px;
-                padding: 24px;
-                background: linear-gradient(135deg, #ffffff 0%, #f5f7fa 100%);
-                border-radius: 16px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
-                transition: all 0.3s ease;
-                border: 1px solid rgba(255, 255, 255, 0.5);
+                background: white;
+                border: 1px solid #e0e0e0;
+                padding: 20px;
                 display: flex;
                 flex-direction: column;
             }
             
-            
-            
-            #asset-info-container h3 {
-                color: #2c3e50;
-                font-size: 20px;
+            #asset-name {
+                color: black;
+                font-size: 32px; /* 从24px增大到32px，使标题更大 */
                 font-weight: 600;
                 margin: 0 0 16px 0;
                 padding-bottom: 12px;
-                border-bottom: 2px solid #e1e8ed;
-                position: relative;
-            }
-            
-            #asset-info-container h3::after {
-                content: '';
-                position: absolute;
-                bottom: -2px;
-                left: 0;
-                width: 60px;
-                height: 2px;
-                background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
+                border-bottom: 1px solid #e0e0e0;
             }
             
             /* 资产描述样式 */
             #asset-description {
-                color: #34495e;
-                font-size: 14px;
-                line-height: 1.6;
+                color: #666; /* 比上面的黑色(#333)更浅的颜色 */
+                font-size: 16px;
                 margin-bottom: 16px;
                 padding: 12px;
-                background-color: #f8f9fa;
-                border-radius: 8px;
-                min-height: 40px;
-                border-left: 3px solid #4facfe;
+                background-color: #f9f9f9;
+                border: 1px solid #e0e0e0;
                 flex-grow: 1;
+                text-indent: 2em; /* 添加2em的首行缩进 */
             }
             
             /* 资产作者样式 */
             #asset-author {
-                color: #7f8c8d;
+                color: #333;
                 font-size: 13px;
-                margin-bottom: 16px;
+                margin-bottom: 12px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-style: italic;
             }
             
             #asset-author::before {
@@ -105,13 +89,12 @@
             
             /* 资产组织样式 */
             #asset-organization {
-                color: #7f8c8d;
+                color: #333;
                 font-size: 13px;
-                margin-bottom: 16px;
+                margin-bottom: 12px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-style: italic;
             }
             
             #asset-organization::before {
@@ -121,55 +104,75 @@
             
             /* 资产日期样式 */
             #asset-date {
-                color: #7f8c8d;
+                color: #333;
                 font-size: 13px;
-                margin-bottom: 16px;
+                margin-bottom: 12px;
                 display: flex;
                 align-items: center;
                 gap: 8px;
-                font-style: italic;
             }
             
             #asset-date::before {
                 content: '📅';
                 font-size: 16px;
             }
-            
-            /* 动画效果 */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                    transform: translateY(10px);
-                }
-                to {
-                    opacity: 1;
-                    transform: translateY(0);
-                }
+
+            #asset-studentid {
+                color: #333;
+                font-size: 13px;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
             }
+
+            #asset-studentid::before {
+                content: '🪪';
+                font-size: 16px;
+            }
+            
             /* 按钮样式 */
             .action-button {
                 padding: 8px 16px;
-                background: linear-gradient(90deg, #4facfe 0%, #00f2fe 100%);
-                color: white;
-                border: none;
-                border-radius: 6px;
-                font-size: 14px;
-                font-weight: 600;
+                background: white;
+                color: black;
+                border: 1px solid #e0e0e0;
+                border-radius: 4px;
+                font-size: 16px;
                 cursor: pointer;
                 transition: all 0.3s ease;
-                box-shadow: 0 4px 12px rgba(79, 172, 254, 0.3);
                 margin-bottom: 20px;
                 align-self: flex-start;
+                width: auto; /* 自适应宽度 */
+                height: auto; /* 自适应高度 */
+                display: flex;
+                align-items: center;
+                justify-content: center;
             }
             
             .action-button:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(79, 172, 254, 0.4);
+                background: #f5f5f5;
+                color: black;
+                transform: translateY(-1px);
             }
             
-            .action-button:active {
-                transform: translateY(0);
-                box-shadow: 0 2px 8px rgba(79, 172, 254, 0.3);
+            /* 收藏和技术支持信息容器 */
+            #collection-info-container {
+                margin-top: 20px;
+                padding: 16px 20px;
+                background: white;
+                border: 1px solid #e0e0e0;
+                color: black;
+                font-size: 14px;
+                line-height: 1.8;
+            }
+            
+            #collection-info-container div {
+                margin-bottom: 8px;
+            }
+            
+            #collection-info-container div:last-child {
+                margin-bottom: 0;
             }
         </style>
         <script type="module" src="main.ts"></script>
@@ -180,17 +183,22 @@
             <div id="left-panel">
                 <!-- 左侧内容 -->
                  <!-- 添加按钮 -->
-                <button id="custom-action-btn" class="action-button">返回</button>
+                <button id="custom-action-btn" class="action-button">&lt; 返回</button>
                 <!-- 资产信息标签容器 -->
-                <div id="asset-info-container" style="margin-top: 20px;">
-                    <h3>当前资产信息</h3>
+                <div id="asset-info-container" style="margin-top: 0;">
+                    <div id="asset-name">3D打印作品-土楼</div>
                     <div id="asset-description"></div>
-                    <div id="asset-author"></div>
+                    <div id="asset-author"></div><!-- 姓名 -->
+                    <div id="asset-studentid"></div><!-- 学号 -->
                     <div id="asset-organization"></div>
                     <div id="asset-date"></div>
                 </div>
-            </div>
-            
+                <!-- 收藏和技术支持信息容器 -->
+                <div id="collection-info-container">
+                    <div>由 档案馆 收藏物件、进行展示</div>
+                    <div>由 人工智能创作坊 提供技术支持</div>
+                </div>
+            </div>            
             <!-- 右侧面板 -->
             <div id="right-panel">
                 <canvas id='application'></canvas>

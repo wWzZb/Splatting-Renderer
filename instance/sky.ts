@@ -13,11 +13,16 @@ export function setupSkybox(app: pc.Application, assets: any, skyType: string = 
         console.error('Helipad resource not loaded');
         return;
     }
-
+    //如果要使用hdr，开启以下代码
     // 生成天空盒立方体贴图
-    const skybox = pc.EnvLighting.generateSkyboxCubemap(assets.helipad.resource as pc.Texture);
-    app.scene.skybox = skybox;
+    // const skybox = pc.EnvLighting.generateSkyboxCubemap(assets.helipad.resource as pc.Texture);
+    // app.scene.skybox = skybox;
 
+    //如果要加载png，开启以下代码
+    app.scene.envAtlas = assets.helipad.resource;
+    app.scene.skyboxMip = 2
+    //设置天空旋转
+    app.scene.skyboxRotation = new pc.Quat().setFromEulerAngles(20, 80, 0);
     // 设置天空类型为无限
     app.scene.sky.type = pc.SKYTYPE_INFINITE;
 

@@ -18,7 +18,7 @@ export function createAssets(modelPath: string, envMapPath: string) {
             'helipad-env-atlas',
             'texture',
             { url: envMapPath },
-            { mipmaps: false },
+            { mipmaps: true },
         ),
     };
 }
