@@ -8,12 +8,6 @@
       "author": "宣洗楼",
       "organization": "厦门工学院档案馆",
       "date": "2025-10-15",
-      "category": "示例模型",
-      "tags": [
-        "基础",
-        "测试",
-        "示例"
-      ],
       "name": "3D打印作品-土楼",
       "studentId": "202301001",
       "instructor": "Professor Zhang"
@@ -28,12 +22,6 @@
       "author": "场景设计师",
       "organization": "场景设计组",
       "date": "2023-11-02",
-      "category": "城市场景",
-      "tags": [
-        "城市",
-        "街道",
-        "建筑"
-      ],
       "name": "城市街道场景",
       "studentId": "202301002",
       "instructor": "Professor Li"
@@ -48,12 +36,6 @@
       "author": "角色设计师",
       "organization": "角色设计组",
       "date": "2023-11-10",
-      "category": "角色模型",
-      "tags": [
-        "人物",
-        "角色",
-        "动画"
-      ],
       "name": "人物角色模型",
       "studentId": "202301003",
       "instructor": "Professor Wang"
@@ -68,12 +50,6 @@
       "author": "机械设计师",
       "organization": "机械设计组",
       "date": "2023-11-15",
-      "category": "交通工具",
-      "tags": [
-        "车辆",
-        "机械",
-        "交通工具"
-      ],
       "name": "交通工具模型",
       "studentId": "202301004",
       "instructor": "Professor Chen"
@@ -88,12 +64,6 @@
       "author": "道具设计师",
       "organization": "道具设计组",
       "date": "2023-12-05",
-      "category": "道具",
-      "tags": [
-        "小型",
-        "道具",
-        "装饰"
-      ],
       "name": "小型道具模型",
       "studentId": "202301005",
       "instructor": "Professor Liu"
@@ -108,12 +78,6 @@
       "author": "室内设计师",
       "organization": "室内设计组",
       "date": "2023-12-10",
-      "category": "室内场景",
-      "tags": [
-        "室内",
-        "家居",
-        "生活"
-      ],
       "name": "室内场景组件",
       "studentId": "202301006",
       "instructor": "Professor Zhao"
@@ -128,12 +92,6 @@
       "author": "环境设计师",
       "organization": "环境设计组",
       "date": "2023-12-15",
-      "category": "自然环境",
-      "tags": [
-        "自然",
-        "风景",
-        "环境"
-      ],
       "name": "自然环境模型",
       "studentId": "202301007",
       "instructor": "Professor Huang"
@@ -148,12 +106,6 @@
       "author": "特效设计师",
       "organization": "特效设计组",
       "date": "2023-12-20",
-      "category": "特效",
-      "tags": [
-        "特效",
-        "视觉",
-        "粒子"
-      ],
       "name": "特殊效果模型",
       "studentId": "202301008",
       "instructor": "Professor Wu"
@@ -168,12 +120,6 @@
       "author": "艺术设计师",
       "organization": "艺术设计组",
       "date": "2024-01-05",
-      "category": "艺术",
-      "tags": [
-        "抽象",
-        "艺术",
-        "创意"
-      ],
       "name": "抽象艺术模型",
       "studentId": "202301009",
       "instructor": "Professor Zhou"
@@ -188,12 +134,6 @@
       "author": "产品设计师",
       "organization": "产品设计组",
       "date": "2024-01-10",
-      "category": "产品",
-      "tags": [
-        "商业",
-        "产品",
-        "展示"
-      ],
       "name": "产品展示模型",
       "studentId": "202301010",
       "instructor": "Professor Xu"
