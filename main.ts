@@ -126,7 +126,7 @@ function updateAssetInfoDisplay(config: any): void {
     const dateElement = document.getElementById('asset-date');
     const organizationElement = document.getElementById('asset-organization');
     // 检查元素是否存在
-    if (!descriptionElement || !authorElement || !dateElement || !organizationElement || !studentidElement) {
+    if (!descriptionElement || !authorElement || !dateElement || !organizationElement || !studentidElement || !nameElement) {
         console.warn('无法找到资产信息显示元素');
         return;
     }
@@ -141,6 +141,11 @@ function updateAssetInfoDisplay(config: any): void {
             descriptionElement.textContent = `${config.additionalInfo.description || '无描述'}`;
         }
 
+        if (config.additionalInfo.description) {
+            // 显示作品名称
+            nameElement.textContent = `${config.additionalInfo.name || '无描述'}`;
+        }
+
         if (config.additionalInfo.author) {
             // 显示作者信息
             authorElement.textContent = `作者: ${config.additionalInfo.author || '未知'}`;
@@ -149,13 +154,14 @@ function updateAssetInfoDisplay(config: any): void {
             // 显示学号信息
             studentidElement.textContent = `学号: ${config.additionalInfo.studentId || '无信息'}`;
         }
-        // 创建日期标签
+
         if (config.additionalInfo.date) {
+            // 显示日期标签
             dateElement.textContent = `日期: ${config.additionalInfo.date || '未知'}`;
         }
 
-        // 创建类别标签
         if (config.additionalInfo.organization) {
+            //显示单位信息
             organizationElement.textContent = `单位: ${config.additionalInfo.organization || '未知'}`;
         }
     }
