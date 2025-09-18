@@ -18,11 +18,152 @@
             min-height: 100vh;
         }
 
-        .empty-area {
+        .hero-section {
             text-align: center;
-            margin-bottom: 40px;
-            color: #666;
-            font-size: 18px;
+            margin: -40px -20px 40px -20px;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #e6f2ff 0%, #f0f8ff 40%, #ffffff 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="%23b3d9ff" opacity="0.3"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
+            opacity: 0.4;
+        }
+
+        .hero-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 2;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            color: #6c757d;
+            margin-bottom: 24px;
+            font-weight: 400;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-description {
+            font-size: 1rem;
+            color: #495057;
+            max-width: 500px;
+            margin: 0 auto 32px auto;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-features {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 32px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-item {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 8px;
+            transition: transform 0.3s ease, background 0.3s ease;
+        }
+
+        .feature-item:hover {
+            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .feature-text {
+            font-size: 0.9rem;
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .hero-divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #4a90e2, #7bb3f0);
+            margin: 24px auto;
+            border-radius: 1px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .hero-section {
+                margin: -40px -15px 40px -15px;
+                padding: 40px 15px;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .hero-description {
+                font-size: 0.95rem;
+                padding: 0 20px;
+            }
+
+            .hero-features {
+                gap: 20px;
+                flex-wrap: wrap;
+            }
+
+            .feature-item {
+                padding: 15px;
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .feature-icon {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-features {
+                gap: 15px;
+            }
+
+            .feature-item {
+                padding: 12px;
+                min-width: 100px;
+            }
+
+            .feature-text {
+                font-size: 0.8rem;
+            }
         }
 
         .year {
@@ -102,21 +243,34 @@
             background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
         }
 
-        .card:nth-child(1) .card-top { background-image: url('https://picsum.photos/id/1/400/300'); }
-        .card:nth-child(2) .card-top { background-image: url('https://picsum.photos/id/20/400/300'); }
-        .card:nth-child(3) .card-top { background-image: url('https://picsum.photos/id/42/400/300'); }
-        .card:nth-child(4) .card-top { background-image: url('https://picsum.photos/id/65/400/300'); }
-        .card:nth-child(5) .card-top { background-image: url('https://picsum.photos/id/91/400/300'); }
-        .card:nth-child(6) .card-top { background-image: url('https://picsum.photos/id/119/400/300'); }
-        .card:nth-child(7) .card-top { background-image: url('https://picsum.photos/id/152/400/300'); }
-        .card:nth-child(8) .card-top { background-image: url('https://picsum.photos/id/180/400/300'); }
-        .card:nth-child(9) .card-top { background-image: url('https://picsum.photos/id/210/400/300'); }
-        .card:nth-child(10) .card-top { background-image: url('https://picsum.photos/id/237/400/300'); }
-        .card:nth-child(11) .card-top { background-image: url('https://picsum.photos/id/260/400/300'); }
-        .card:nth-child(12) .card-top { background-image: url('https://picsum.photos/id/287/400/300'); }
-        .card:nth-child(13) .card-top { background-image: url('https://picsum.photos/id/312/400/300'); }
-        .card:nth-child(14) .card-top { background-image: url('https://picsum.photos/id/335/400/300'); }
-        .card:nth-child(15) .card-top { background-image: url('https://picsum.photos/id/350/400/300'); }
+        /* 下学期模型背景图片 */
+        .semester-lower .cards-grid .model-link:nth-child(1) .card-top { background-image: url('thumbnails/1.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(2) .card-top { background-image: url('thumbnails/2.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(3) .card-top { background-image: url('thumbnails/3.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(4) .card-top { background-image: url('thumbnails/4.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(5) .card-top { background-image: url('thumbnails/5.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(6) .card-top { background-image: url('thumbnails/6.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(7) .card-top { background-image: url('thumbnails/7.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(8) .card-top { background-image: url('thumbnails/8.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(9) .card-top { background-image: url('thumbnails/9.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(10) .card-top { background-image: url('thumbnails/10.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(11) .card-top { background-image: url('thumbnails/1.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(12) .card-top { background-image: url('thumbnails/2.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(13) .card-top { background-image: url('thumbnails/3.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(14) .card-top { background-image: url('thumbnails/4.png'); }
+        .semester-lower .cards-grid .model-link:nth-child(15) .card-top { background-image: url('thumbnails/5.png'); }
+
+        /* 上学期模型背景图片 */
+        .semester-upper .cards-grid .model-link:nth-child(1) .card-top { background-image: url('thumbnails/6.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(2) .card-top { background-image: url('thumbnails/7.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(3) .card-top { background-image: url('thumbnails/8.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(4) .card-top { background-image: url('thumbnails/9.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(5) .card-top { background-image: url('thumbnails/10.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(6) .card-top { background-image: url('thumbnails/1.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(7) .card-top { background-image: url('thumbnails/2.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(8) .card-top { background-image: url('thumbnails/3.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(9) .card-top { background-image: url('thumbnails/4.png'); }
+        .semester-upper .cards-grid .model-link:nth-child(10) .card-top { background-image: url('thumbnails/5.png'); }
 
         .card-bottom {
             background-color: white;
@@ -182,10 +336,37 @@
     </style>
 </head>
 <body>
-    <div class="empty-area">这是head</div>
+    <div class="hero-section">
+        <h1 class="hero-title">学生作品收藏馆</h1>
+        <h2 class="hero-subtitle">3D创意作品展示平台</h2>
+        <div class="hero-divider"></div>
+        <p class="hero-description">
+            汇聚学生创意与智慧的3D打印作品展示空间，
+            展现年轻设计师的创新思维与精湛技艺。
+        </p>
+        
+        <div class="hero-features">
+            <div class="feature-item">
+                <span class="feature-icon">🎨</span>
+                <div class="feature-text">创意设计</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🖨️</span>
+                <div class="feature-text">3D打印</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">💡</span>
+                <div class="feature-text">创新思维</div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">🎓</span>
+                <div class="feature-text">学生作品</div>
+            </div>
+        </div>
+    </div>
     
-    <div class="year">2025 <span class="upper">上学期</span></div>
-    <div class="year-section">
+    <div class="year">2025 <span class="upper">下学期</span></div>
+    <div class="year-section semester-lower">
         <div class="cards-grid">
             <a href="/1" class="model-link">
                 <div class="card">
@@ -339,8 +520,8 @@
         </div>
     </div>
     
-    <div class="year">2025 <span class="lower">下学期</span></div>
-    <div class="year-section">
+    <div class="year">2025 <span class="lower">上学期</span></div>
+    <div class="year-section semester-upper">
         <div class="cards-grid">
             <a href="/1" class="model-link">
                 <div class="card">

@@ -15,7 +15,7 @@
   },
   "2": {
     "gsplatUrl": "splatting/2完成.ply",
-    "skyboxUrl": "cube/FN_HDRI_029.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 1,
     "additionalInfo": {
       "description": "城市街道场景模型，展示城市环境",
@@ -29,7 +29,7 @@
   },
   "3": {
     "gsplatUrl": "splatting/3完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.6,
     "additionalInfo": {
       "description": "人物角色模型，用于演示动画和交互",
@@ -43,7 +43,7 @@
   },
   "4": {
     "gsplatUrl": "splatting/4完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 1,
     "additionalInfo": {
       "description": "交通工具模型，展示精细机械结构",
@@ -57,7 +57,7 @@
   },
   "5": {
     "gsplatUrl": "splatting/9完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.3,
     "additionalInfo": {
       "description": "小型道具模型，用于场景细节装饰",
@@ -71,7 +71,7 @@
   },
   "6": {
     "gsplatUrl": "splatting/10完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.3,
     "additionalInfo": {
       "description": "室内场景组件，展示家居环境",
@@ -85,7 +85,7 @@
   },
   "7": {
     "gsplatUrl": "splatting/12完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.6,
     "additionalInfo": {
       "description": "自然环境模型，展示自然风光",
@@ -99,7 +99,7 @@
   },
   "8": {
     "gsplatUrl": "splatting/13完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.4,
     "additionalInfo": {
       "description": "特殊效果模型，展示视觉特效",
@@ -113,7 +113,7 @@
   },
   "9": {
     "gsplatUrl": "splatting/14完成.ply",
-    "skyboxUrl": "cube/wide-street.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.5,
     "additionalInfo": {
       "description": "抽象艺术模型，展示创意设计",
@@ -127,7 +127,7 @@
   },
   "10": {
     "gsplatUrl": "splatting/15完成.ply",
-    "skyboxUrl": "cube/empty-room.hdr",
+    "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 0.5,
     "additionalInfo": {
       "description": "产品展示模型，用于商业展示",
