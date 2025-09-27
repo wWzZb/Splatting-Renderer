@@ -2,7 +2,7 @@
   "1": {
     "gsplatUrl": "splatting/1完成.ply",
     "skyboxUrl": "cube/helipad-env-atlas.png",
-    "scale": 0.6,
+    "scale": 0.8,
     "additionalInfo": {
       "description": "这款 3D 打印土楼作品，以福建客家土楼为原型，精准还原了其 “外圆内方” 的经典布局与环形夯土墙结构。细节处复刻了错落的檐角、拱形窗洞与中心祖堂轮廓，用打印层叠纹理模拟夯土质感，既保留传统建筑的厚重韵味，又以轻量化材质呈现土楼的对称美学，成为可触摸的非遗建筑缩影。",
       "author": "宣洗楼",
@@ -14,7 +14,7 @@
     }
   },
   "2": {
-    "gsplatUrl": "splatting/2完成.ply",
+    "gsplatUrl": "http://qny.xitaiworkshop.space/1finish.ply",
     "skyboxUrl": "cube/helipad-env-atlas.png",
     "scale": 1,
     "additionalInfo": {

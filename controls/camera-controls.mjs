@@ -1,119 +1,13 @@
 import {
-    math,
-    DualGestureSource,
-    FlyController,
-    FocusController,
-    GamepadSource,
-    InputFrame,
-    KeyboardMouseSource,
-    MultiTouchSource,
-    OrbitController,
-    Pose,
-    PROJECTION_PERSPECTIVE,
     Script,
-    Vec2,
     Vec3
 } from 'playcanvas';
 
-/** @import { CameraComponent, InputController } from 'playcanvas' */
+/** @import { CameraComponent } from 'playcanvas' */
 
 /**
- * @typedef {object} CameraControlsState
- * @property {Vec3} axis - The axis.
- * @property {number} shift - The shift.
- * @property {number} ctrl - The ctrl.
- * @property {number[]} mouse - The mouse.
- * @property {number} touches - The touches.
+ * 相机控制器 - 集成手动控制和自动动画功能
  */
-
-const tmpV1 = new Vec3();
-const tmpV2 = new Vec3();
-
-const pose = new Pose();
-
-const frame = new InputFrame({
-    move: [0, 0, 0],
-    rotate: [0, 0, 0]
-});
-
-/**
- * Calculate the damp rate.
- *
- * @param {number} damping - The damping.
- * @param {number} dt - The delta time.
- * @returns {number} - The lerp rate.
- */
-export const damp = (damping, dt) => 1 - Math.pow(damping, dt * 1000);
-
-/**
- * @param {number[]} stick - The stick
- * @param {number} low - The low dead zone
- * @param {number} high - The high dead zone
- */
-const applyDeadZone = (stick, low, high) => {
-    const mag = Math.sqrt(stick[0] * stick[0] + stick[1] * stick[1]);
-    if (mag < low) {
-        stick.fill(0);
-        return;
-    }
-    const scale = (mag - low) / (high - low);
-    stick[0] *= scale / mag;
-    stick[1] *= scale / mag;
-};
-
-/**
- * Converts screen space mouse deltas to world space pan vector.
- *
- * @param {CameraComponent} camera - The camera component.
- * @param {number} dx - The mouse delta x value.
- * @param {number} dy - The mouse delta y value.
- * @param {number} dz - The world space zoom delta value.
- * @param {Vec3} [out] - The output vector to store the pan result.
- * @returns {Vec3} - The pan vector in world space.
- * @private
- */
-const screenToWorld = (camera, dx, dy, dz, out = new Vec3()) => {
-    const { system, fov, aspectRatio, horizontalFov, projection, orthoHeight } = camera;
-    const { width, height } = system.app.graphicsDevice.clientRect;
-
-    // normalize deltas to device coord space
-    out.set(
-        -(dx / width) * 2,
-        (dy / height) * 2,
-        0
-    );
-
-    // calculate half size of the view frustum at the current distance
-    const halfSize = tmpV2.set(0, 0, 0);
-    if (projection === PROJECTION_PERSPECTIVE) {
-        const halfSlice = dz * Math.tan(0.5 * fov * math.DEG_TO_RAD);
-        if (horizontalFov) {
-            halfSize.set(
-                halfSlice,
-                halfSlice / aspectRatio,
-                0
-            );
-        } else {
-            halfSize.set(
-                halfSlice * aspectRatio,
-                halfSlice,
-                0
-            );
-        }
-    } else {
-        halfSize.set(
-            orthoHeight * aspectRatio,
-            orthoHeight,
-            0
-        );
-    }
-
-    // scale by device coord space
-    out.mul(halfSize);
-
-    return out;
-};
-
 class CameraControls extends Script {
     static scriptName = 'cameraControls';
 
@@ -125,223 +19,160 @@ class CameraControls extends Script {
     _camera;
 
     /**
+     * @type {Vec3}
+     * @private
+     */
+    _target = new Vec3(0, -1, 0);
+
+    /**
+     * @type {number} - 相机到目标的距离
+     * @private
+     */
+    _distance = 8; // 减小距离，将相机拉近
+
+    /**
+     * @type {number} - 默认相机距离（用于自动控制模式）
+     * @private
+     */
+    _defaultDistance = 8; // 存储初始默认距离
+
+    /**
+     * @type {number} - 水平旋转角度（度）
+     * @private
+     */
+    _yaw = 45;
+
+    /**
+     * @type {number} - 垂直旋转角度（度）
+     * @private
+     */
+    _pitch = 30;
+
+    /**
+     * @type {number} - 最小缩放距离
+     * @private
+     */
+    _minDistance = 3; // 设置最小缩放距离
+
+    /**
+     * @type {number} - 最大缩放距离
+     * @private
+     */
+    _maxDistance = 15; // 设置最大缩放距离
+
+    /**
+     * @type {number} - 最小俯仰角度（度）
+     * @private
+     */
+    _minPitch = -10; // 设置最小俯仰角度
+
+    /**
+     * @type {number} - 最大俯仰角度（度）
+     * @private
+     */
+    _maxPitch = 60; // 设置最大俯仰角度
+
+    /**
+     * @type {number} - 最小偏航角度（度）
+     * @private
+     */
+    _minYaw = -120; // 设置最小偏航角度
+
+    /**
+     * @type {number} - 最大偏航角度（度）
+     * @private
+     */
+    _maxYaw = 120; // 设置最大偏航角度
+
+    /**
      * @type {boolean}
      * @private
      */
-    _enableOrbit = true;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    _enableFly = true;
+    _isDragging = false;
 
     /**
      * @type {number}
      * @private
      */
-    _startZoomDist = 0;
+    _lastX = 0;
 
     /**
-     * @type {Vec2}
-     * @private
-     */
-    _pitchRange = new Vec2(-360, 360);
-
-    /**
-     * @type {Vec2}
-     * @private
-     */
-    _yawRange = new Vec2(-360, 360);
-
-    /**
-     * @type {Vec2}
-     * @private
-     */
-    _zoomRange = new Vec2(0.01, 0);
-
-    /**
-     * @type {KeyboardMouseSource}
-     * @private
-     */
-    _desktopInput = new KeyboardMouseSource();
-
-    /**
-     * @type {MultiTouchSource}
-     * @private
-     */
-    _orbitMobileInput = new MultiTouchSource();
-
-    /**
-     * @type {DualGestureSource}
-     * @private
-     */
-    _flyMobileInput = new DualGestureSource();
-
-    /**
-     * @type {GamepadSource}
-     * @private
-     */
-    _gamepadInput = new GamepadSource();
-
-    /**
-     * @type {FlyController}
-     * @private
-     */
-    _flyController = new FlyController();
-
-    /**
-     * @type {OrbitController}
-     * @private
-     */
-    _orbitController = new OrbitController();
-
-    /**
-     * @type {FocusController}
-     * @private
-     */
-    _focusController = new FocusController();
-
-    /**
-     * @type {InputController}
-     * @private
-     */
-    // @ts-ignore
-    _controller;
-
-    /**
-     * @type {Pose}
-     * @private
-     */
-    _pose = new Pose();
-
-    /**
-     * @type {'orbit' | 'fly' | 'focus'}
-     * @private
-     */
-    // @ts-ignore
-    _mode;
-
-    /**
-     * @type {CameraControlsState}
-     * @private
-     */
-    _state = {
-        axis: new Vec3(),
-        shift: 0,
-        ctrl: 0,
-        mouse: [0, 0, 0],
-        touches: 0
-    };
-
-    /**
-     * Whether to skip the update.
-     *
-     * @attribute
-     * @title Skip Update
-     * @type {boolean}
-     */
-    skipUpdate = false;
-
-    /**
-     * Enable panning.
-     *
-     * @attribute
-     * @title Enable Panning
-     * @type {boolean}
-     */
-    enablePan = true;
-
-    /**
-     * The scene size. The zoom, pan and fly speeds are relative to this size.
-     *
-     * @attribute
-     * @title Scene Size
      * @type {number}
+     * @private
      */
-    sceneSize = 100;
+    _lastY = 0;
 
     /**
-     * The rotation speed.
-     *
-     * @attribute
-     * @title Rotate Speed
-     * @type {number}
+     * @type {boolean} - 是否启用自动旋转
+     * @private
      */
-    rotateSpeed = 0.2;
+    _autoRotate = false;
 
     /**
-     * The rotation joystick sensitivity.
-     *
-     * @attribute
-     * @title Rotate Joystick Sensitivity
-     * @type {number}
+     * @type {boolean} - 是否正在进行过渡动画
+     * @private
      */
-    rotateJoystickSens = 2;
+    _isTransitioning = false;
 
     /**
-     * The fly move speed relative to the scene size.
-     *
-     * @attribute
-     * @title Move Speed
-     * @type {number}
+     * @type {number} - 过渡动画时间
+     * @private
      */
-    moveSpeed = 2;
+    _transitionTime = 0;
 
     /**
-     * The fast fly move speed relative to the scene size.
-     *
-     * @attribute
-     * @title Move Fast Speed
-     * @type {number}
+     * @type {number} - 过渡动画持续时间（秒）
+     * @private
      */
-    moveFastSpeed = 4;
+    _transitionDuration = 3.0;
 
     /**
-     * The slow fly move speed relative to the scene size.
-     *
-     * @attribute
-     * @title Move Slow Speed
-     * @type {number}
+     * @type {number} - 自动旋转动画时间
+     * @private
      */
-    moveSlowSpeed = 1;
+    _autoAnimationTime = 0;
 
     /**
-     * The zoom speed relative to the scene size.
-     *
-     * @attribute
-     * @title Zoom Speed
-     * @type {number}
+     * @type {number} - 上次用户活动时间
+     * @private
      */
-    zoomSpeed = 0.001;
+    _lastMouseActivityTime = 0;
 
     /**
-     * The touch zoom pinch sensitivity.
-     *
-     * @attribute
-     * @title Zoom
-     * @type {number}
+     * @type {number} - 自动旋转延迟时间（秒）
+     * @private
      */
-    zoomPinchSens = 5;
+    _autoRotateDelay = 3;
 
     /**
-     * The gamepad dead zone.
-     *
-     * @attribute
-     * @title Gamepad Dead Zone
-     * @type {Vec2}
+     * @type {number} - 自动旋转速度系数
+     * @private
      */
-    gamepadDeadZone = new Vec2(0.3, 0.6);
+    _autoRotateSpeed = 0.8; // 提高速度系数
 
     /**
-     * The joystick event name for the UI position for the base and stick elements.
-     * The event name is appended with the side: 'left' or 'right'.
-     *
-     * @attribute
-     * @title Joystick Base Event Name
-     * @type {string}
+     * @type {boolean} - 是否需要同步状态
+     * @private
      */
-    joystickEventName = 'joystick';
+    _needsStateSync = false;
+
+    /**
+     * @type {number} - 水平摆动角度范围（度）
+     * @private
+     */
+    _horizontalSwingRange = 30; // 默认30度
+
+    /**
+     * @type {number} - 垂直摆动角度范围（度）
+     * @private
+     */
+    _verticalSwingRange = 15; // 默认15度
+
+    /**
+     * @type {number} - 基准俯仰角度（度）
+     * @private
+     */
+    _basePitch = 15;
 
     constructor({ app, entity, ...args }) {
         super({ app, entity, ...args });
@@ -351,477 +182,436 @@ class CameraControls extends Script {
         }
         this._camera = this.entity.camera;
 
-        // set orbit controller defaults
-        this._orbitController.zoomRange = new Vec2(0.01, Infinity);
+        // 从当前相机位置初始化控制器状态
+        this._updateControllerFromCamera();
 
-        // attach input
-        this._desktopInput.attach(this.app.graphicsDevice.canvas);
-        this._orbitMobileInput.attach(this.app.graphicsDevice.canvas);
-        this._flyMobileInput.attach(this.app.graphicsDevice.canvas);
-        this._gamepadInput.attach(this.app.graphicsDevice.canvas);
+        // 使用PlayCanvas的事件系统
+        const canvas = this.app.graphicsDevice.canvas;
 
-        // expose ui events
-        this._flyMobileInput.on('joystick:position:left', ([bx, by, sx, sy]) => {
-            if (this._mode !== 'fly') {
-                return;
-            }
-            this.app.fire(`${this.joystickEventName}:left`, bx, by, sx, sy);
-        });
-        this._flyMobileInput.on('joystick:position:right', ([bx, by, sx, sy]) => {
-            if (this._mode !== 'fly') {
-                return;
-            }
-            this.app.fire(`${this.joystickEventName}:right`, bx, by, sx, sy);
-        });
+        // 鼠标事件
+        canvas.addEventListener('mousedown', this._onMouseDown.bind(this));
+        canvas.addEventListener('mousemove', this._onMouseMove.bind(this));
+        window.addEventListener('mouseup', this._onMouseUp.bind(this));
+        canvas.addEventListener('wheel', this._onMouseWheel.bind(this));
 
-        // pose
-        this._pose.look(this._camera.entity.getPosition(), Vec3.ZERO);
+        // 触摸事件
+        canvas.addEventListener('touchstart', this._onTouchStart.bind(this));
+        canvas.addEventListener('touchmove', this._onTouchMove.bind(this));
+        canvas.addEventListener('touchend', this._onTouchEnd.bind(this));
 
-        // mode
-        this._setMode('orbit');
+        // 初始化时间
+        this._autoAnimationTime = Date.now() / 1000;
+        this._lastMouseActivityTime = Date.now() / 1000;
 
-        // destroy
+        // 调试信息
+        console.log('CameraControls initialized with yaw=' + this._yaw + ', pitch=' + this._pitch + ', distance=' + this._distance);
+
+        // 监听销毁事件
         this.on('destroy', this._destroy, this);
     }
 
     /**
-     * Enable orbit camera controls.
-     *
-     * @attribute
-     * @title Enable Orbit
-     * @type {boolean}
-     * @default true
+     * 从相机当前位置更新控制器内部状态
+     * @private
      */
-    set enableOrbit(enable) {
-        this._enableOrbit = enable;
+    _updateControllerFromCamera() {
+        const cameraPos = this.entity.getPosition();
 
-        if (!this._enableOrbit && this._mode === 'orbit') {
-            this._setMode('fly');
+        // 计算相机到目标点的向量
+        const direction = new Vec3();
+        direction.sub2(cameraPos, this._target);
+
+        // 只保留角度计算，不再覆盖默认距离值
+        // this._distance = direction.length(); // 这行代码会覆盖我们设置的默认距离
+
+        if (direction.length() > 0.001) {
+            // 归一化方向向量
+            direction.normalize();
+
+            // 计算偏航角 (水平旋转)
+            this._yaw = Math.atan2(direction.x, direction.z) * 180 / Math.PI;
+
+            // 计算俯仰角 (垂直旋转)
+            this._pitch = Math.asin(direction.y) * 180 / Math.PI;
+
+            console.log('Controller updated from camera position: yaw=' + this._yaw.toFixed(2) + ', pitch=' + this._pitch.toFixed(2) + ', distance=' + this._distance.toFixed(2));
+        }
+
+        // 使用默认距离更新相机位置，确保距离设置生效
+        this._updateCameraFromController();
+    }
+
+    /**
+     * 根据控制器状态更新相机位置
+     * @private
+     */
+    _updateCameraFromController() {
+        // 限制偏航和俯仰角度在指定范围内
+        this._yaw = Math.max(this._minYaw, Math.min(this._maxYaw, this._yaw));
+        this._pitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._pitch));
+
+        // 限制距离在指定范围内
+        this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._distance));
+
+        // 将角度转换为弧度
+        const radYaw = this._yaw * Math.PI / 180;
+        const radPitch = this._pitch * Math.PI / 180;
+
+        // 计算相机位置
+        const x = this._target.x + this._distance * Math.cos(radPitch) * Math.sin(radYaw);
+        const y = this._target.y + this._distance * Math.sin(radPitch);
+        const z = this._target.z + this._distance * Math.cos(radPitch) * Math.cos(radYaw);
+
+        // 设置相机位置并看向目标
+        this.entity.setPosition(x, y, z);
+        this.entity.lookAt(this._target);
+
+        console.log('Camera updated from controller: pos(' + x.toFixed(2) + ', ' + y.toFixed(2) + ', ' + z.toFixed(2) + ')');
+    }
+
+    /**
+     * 执行自动相机动画
+     * @param {number} dt - 时间增量
+     * @private
+     */
+    _performAutoRotate(dt) {
+        if (this._isTransitioning) {
+            // 执行过渡动画
+            this._transitionTime += dt;
+            const progress = Math.min(this._transitionTime / this._transitionDuration, 1.0);
+
+            // 使用缓动函数使过渡更平滑
+            const easeProgress = 1 - Math.pow(1 - progress, 3);
+
+            // 更新动画时间 - 使用更高的速度系数
+            this._autoAnimationTime += dt * this._autoRotateSpeed;
+
+            // 计算目标自动控制角度，并确保在限制范围内
+            const baseYaw = 0;
+            const maxYawRange = Math.min(this._horizontalSwingRange, (this._maxYaw - this._minYaw) / 2);
+            const targetYaw = Math.max(this._minYaw, Math.min(this._maxYaw, baseYaw + maxYawRange * Math.sin(this._autoAnimationTime * 0.8)));
+
+            const maxPitchRange = Math.min(this._verticalSwingRange, Math.min(this._maxPitch - this._basePitch, this._basePitch - this._minPitch));
+            const targetPitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._basePitch + maxPitchRange * Math.cos(this._autoAnimationTime * 0.8)));
+
+            // 计算目标距离 - 恢复到默认距离
+            const targetDistance = Math.max(this._minDistance, Math.min(this._maxDistance, this._defaultDistance));
+
+            // 插值计算当前角度和距离
+            this._yaw = this._yaw + (targetYaw - this._yaw) * easeProgress;
+            this._pitch = this._pitch + (targetPitch - this._pitch) * easeProgress;
+            this._distance = this._distance + (targetDistance - this._distance) * easeProgress;
+
+            // 确保角度在限制范围内
+            this._yaw = Math.max(this._minYaw, Math.min(this._maxYaw, this._yaw));
+            this._pitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._pitch));
+            this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._distance));
+
+            // 检查过渡是否完成
+            if (progress >= 1.0) {
+                this._isTransitioning = false;
+                // 确保距离精确设置为默认值
+                this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._defaultDistance));
+                console.log('Transition to auto-rotate completed');
+            }
+        } else {
+            // 正常自动旋转模式
+            // 确保距离保持为默认值
+            this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._defaultDistance));
+
+            // 更新动画时间 - 使用更高的速度系数
+            this._autoAnimationTime += dt * this._autoRotateSpeed;
+
+            // 水平摆动 - 增加摆动频率，并确保在限制范围内
+            const baseYaw = 0;
+            const maxYawRange = Math.min(this._horizontalSwingRange, (this._maxYaw - this._minYaw) / 2);
+            this._yaw = Math.max(this._minYaw, Math.min(this._maxYaw, baseYaw + maxYawRange * Math.sin(this._autoAnimationTime * 0.8)));
+
+            // 垂直摆动 - 增加摆动频率，使用固定的基准俯仰角，并确保在限制范围内
+            const maxPitchRange = Math.min(this._verticalSwingRange, Math.min(this._maxPitch - this._basePitch, this._basePitch - this._minPitch));
+            this._pitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._basePitch + maxPitchRange * Math.cos(this._autoAnimationTime * 0.8)));
+        }
+
+        // 更新相机位置
+        this._updateCameraFromController();
+    }
+
+    /**
+     * 鼠标按下事件
+     * @private
+     */
+    _onMouseDown(e) {
+        if (e.button === 0) { // 左键
+            this._isDragging = true;
+            this._lastX = e.clientX;
+            this._lastY = e.clientY;
+            this._autoRotate = false; // 停止自动旋转
+            this._lastMouseActivityTime = Date.now() / 1000;
+            console.log('Mouse down at position:', e.clientX, e.clientY);
         }
     }
 
-    get enableOrbit() {
-        return this._enableOrbit;
-    }
-
     /**
-     * Enable fly camera controls.
-     *
-     * @attribute
-     * @title Enable Fly
-     * @type {boolean}
-     * @default true
+     * 鼠标移动事件 - 直观的轨道控制逻辑
+     * @private
      */
-    set enableFly(enable) {
-        this._enableFly = enable;
+    // 在鼠标移动事件中修改左右滑动方向
+    _onMouseMove(e) {
+        if (this._isDragging) {
+            const deltaX = e.clientX - this._lastX;
+            const deltaY = e.clientY - this._lastY;
 
-        if (!this._enableFly && this._mode === 'fly') {
-            this._setMode('orbit');
+            // 修改：将偏航角增量取反，使左右滑动方向相反
+            this._yaw -= deltaX * 0.15;  // 水平旋转灵敏度，不再限制范围
+            this._pitch += deltaY * 0.15; // 垂直旋转灵敏度
+
+            // 只限制俯仰角度，防止相机翻转
+            this._pitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._pitch));
+
+            // 更新最后的鼠标位置
+            this._lastX = e.clientX;
+            this._lastY = e.clientY;
+            this._lastMouseActivityTime = Date.now() / 1000;
+
+            // 根据更新后的控制器状态更新相机位置
+            this._updateCameraFromController();
         }
     }
 
-    get enableFly() {
-        return this._enableFly;
-    }
-
     /**
-     * The focus point.
-     *
-     * @attribute
-     * @title Focus Point
-     * @type {Vec3}
-     * @default [0, 0, 0]
+     * 鼠标释放事件
+     * @private
      */
-    set focusPoint(point) {
-        const position = this._camera.entity.getPosition();
-        this._startZoomDist = position.distance(point);
-        this._controller.attach(this._pose.look(position, point), false);
-    }
-
-    get focusPoint() {
-        return this._pose.getFocus(tmpV1);
-    }
-
-    /**
-     * The focus damping. A higher value means more damping. A value of 0 means no damping.
-     * The damping is applied to the orbit mode.
-     *
-     * @attribute
-     * @title Rotate Damping
-     * @type {number}
-     * @default 0.98
-     */
-    set focusDamping(damping) {
-        this._focusController.focusDamping = damping;
-    }
-
-    get focusDamping() {
-        return this._focusController.focusDamping;
-    }
-
-    /**
-     * The rotate damping. In the range 0 to 1, where a value of 0 means no damping and 1 means full
-     * damping. The damping is applied to both the fly and orbit modes.
-     *
-     * @attribute
-     * @title Rotate Damping
-     * @type {number}
-     * @default 0.98
-     */
-    set rotateDamping(damping) {
-        this._flyController.rotateDamping = damping;
-        this._orbitController.rotateDamping = damping;
-    }
-
-    get rotateDamping() {
-        return this._orbitController.rotateDamping;
-    }
-
-    /**
-     * The move damping. In the range 0 to 1, where a value of 0 means no damping and 1 means full
-     * damping. The damping is applied to the fly mode and the orbit mode when panning.
-     *
-     * @attribute
-     * @title Move Damping
-     * @type {number}
-     * @default 0.98
-     */
-    set moveDamping(damping) {
-        this._flyController.moveDamping = damping;
-    }
-
-    get moveDamping() {
-        return this._flyController.moveDamping;
-    }
-
-    /**
-     * The zoom damping. In the range 0 to 1, where a value of 0 means no damping and 1 means full
-     * damping. The damping is applied to the orbit mode.
-     *
-     * @attribute
-     * @title Zoom Damping
-     * @type {number}
-     * @default 0.98
-     */
-    set zoomDamping(damping) {
-        this._orbitController.zoomDamping = damping;
-    }
-
-    get zoomDamping() {
-        return this._orbitController.zoomDamping;
-    }
-
-    /**
-     * The pitch range. In the range -360 to 360 degrees. The pitch range is applied to the fly mode
-     * and the orbit mode.
-     *
-     * @attribute
-     * @title Pitch Range
-     * @type {Vec2}
-     * @default [-360, 360]
-     */
-    set pitchRange(range) {
-        this._pitchRange.x = math.clamp(range.x, -360, 360);
-        this._pitchRange.y = math.clamp(range.y, -360, 360);
-        this._flyController.pitchRange = this._pitchRange;
-        this._orbitController.pitchRange = this._pitchRange;
-    }
-
-    get pitchRange() {
-        return this._pitchRange;
-    }
-
-    /**
-     * The yaw range. In the range -360 to 360 degrees. The pitch range is applied to the fly mode
-     * and the orbit mode.
-     *
-     * @attribute
-     * @title Yaw Range
-     * @type {Vec2}
-     * @default [-360, 360]
-     */
-    set yawRange(range) {
-        this._yawRange.x = math.clamp(range.x, -360, 360);
-        this._yawRange.y = math.clamp(range.y, -360, 360);
-        this._flyController.yawRange = this._yawRange;
-        this._orbitController.yawRange = this._yawRange;
-    }
-
-    get yawRange() {
-        return this._yawRange;
-    }
-
-    /**
-     * The zoom range.
-     *
-     * @attribute
-     * @title Zoom Range
-     * @type {Vec2}
-     * @default [0.01, 0]
-     */
-    set zoomRange(range) {
-        this._zoomRange.x = range.x;
-        this._zoomRange.y = range.y <= range.x ? Infinity : range.y;
-        this._orbitController.zoomRange = this._zoomRange;
-    }
-
-    get zoomRange() {
-        return this._zoomRange;
-    }
-
-    /**
-     * The layout of the mobile input. The layout can be one of the following:
-     *
-     * - `joystick-joystick`: Two virtual joysticks.
-     * - `joystick-touch`: One virtual joystick and one touch.
-     * - `touch-joystick`: One touch and one virtual joystick.
-     * - `touch-touch`: Two touches.
-     *
-     * Default is `joystick-touch`.
-     *
-     * @attribute
-     * @title Use Virtual Gamepad
-     * @type {string}
-     * @default 'joystick-touch'
-     */
-    set mobileInputLayout(layout) {
-        if (!/(?:joystick|touch)-(?:joystick|touch)/.test(layout)) {
-            console.warn(`CameraControls: invalid mobile input layout: ${layout}`);
-            return;
+    _onMouseUp() {
+        if (this._isDragging) {
+            this._isDragging = false;
+            this._lastMouseActivityTime = Date.now() / 1000;
+            console.log('Mouse up detected');
         }
-        this._flyMobileInput.layout = layout;
-    }
-
-    get mobileInputLayout() {
-        return this._flyMobileInput.layout;
     }
 
     /**
+     * 鼠标滚轮事件 - 直观的缩放控制
+     * @private
+     */
+    _onMouseWheel(e) {
+        e.preventDefault();
+
+        // 直观的缩放逻辑：向前滚动滚轮 -> 放大 (距离减小)
+        // 向后滚动滚轮 -> 缩小 (距离增大)
+        const zoomFactor = e.deltaY > 0 ? 1.1 : 0.9;
+        this._distance = Math.max(this._minDistance, Math.min(this._maxDistance, this._distance * zoomFactor));
+        this._autoRotate = false; // 停止自动旋转
+        this._lastMouseActivityTime = Date.now() / 1000;
+
+        // 根据更新后的距离更新相机位置
+        this._updateCameraFromController();
+        console.log('Zoom event: deltaY=' + e.deltaY + ', new distance=' + this._distance);
+    }
+
+    /**
+     * 触摸开始事件
+     * @private
+     */
+    // 在类的私有属性部分添加双指缩放相关变量
+    /**
+     * @type {number} - 上次触摸时的两指距离
+     * @private
+     */
+    _lastTouchDistance = 0;
+
+    /**
+     * @type {boolean} - 是否正在进行双指操作
+     * @private
+     */
+    _isPinching = false;
+
+    // 修改_onTouchStart方法，添加双指检测
+    _onTouchStart(e) {
+        e.preventDefault();
+        // 双指操作检测
+        if (e.touches.length === 2) {
+            this._isPinching = true;
+            // 计算两指之间的初始距离
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            this._lastTouchDistance = Math.sqrt(dx * dx + dy * dy);
+            this._autoRotate = false; // 停止自动旋转
+            this._lastMouseActivityTime = Date.now() / 1000;
+            console.log('Pinch started with distance:', this._lastTouchDistance);
+        } else if (e.touches.length === 1 && !this._isPinching) {
+            // 单指拖拽
+            this._isDragging = true;
+            this._lastX = e.touches[0].clientX;
+            this._lastY = e.touches[0].clientY;
+            this._autoRotate = false; // 停止自动旋转
+            this._lastMouseActivityTime = Date.now() / 1000;
+            console.log('Touch start detected at position:', this._lastX, this._lastY);
+        }
+    }
+
+    /**
+     * 触摸移动事件 - 与鼠标相同的直观控制逻辑
+     * @private
+     */
+    _onTouchMove(e) {
+        e.preventDefault();
+
+        // 处理双指缩放
+        if (e.touches.length === 2) {
+            this._isPinching = true;
+
+            // 计算当前两指之间的距离
+            const dx = e.touches[0].clientX - e.touches[1].clientX;
+            const dy = e.touches[0].clientY - e.touches[1].clientY;
+            const currentDistance = Math.sqrt(dx * dx + dy * dy);
+
+            // 如果有上次的距离记录，计算缩放比例
+            if (this._lastTouchDistance > 0) {
+                const scaleFactor = currentDistance / this._lastTouchDistance;
+
+                // 应用缩放，保持在最小和最大距离范围内
+                this._distance = Math.max(this._minDistance,
+                    Math.min(this._maxDistance,
+                        this._distance / scaleFactor));
+
+                this._autoRotate = false; // 停止自动旋转
+                this._lastMouseActivityTime = Date.now() / 1000;
+
+                // 更新相机位置
+                this._updateCameraFromController();
+
+                console.log('Pinch zoom factor:', scaleFactor, 'New distance:', this._distance);
+            }
+
+            // 更新上次的距离
+            this._lastTouchDistance = currentDistance;
+        }
+        // 处理单指拖拽（仅在非双指操作时）
+        else if (this._isDragging && e.touches.length === 1 && !this._isPinching) {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const deltaX = currentX - this._lastX;
+            const deltaY = currentY - this._lastY;
+
+            // 修改：将偏航角增量取反，使左右滑动方向相反
+            this._yaw -= deltaX * 0.15; // 偏航角不再限制范围
+            this._pitch += deltaY * 0.15;
+
+            // 只限制俯仰角度
+            this._pitch = Math.max(this._minPitch, Math.min(this._maxPitch, this._pitch));
+
+            // 更新最后的触摸位置
+            this._lastX = currentX;
+            this._lastY = currentY;
+            this._lastMouseActivityTime = Date.now() / 1000;
+
+            // 更新相机位置
+            this._updateCameraFromController();
+        }
+    }
+
+    /**
+     * 触摸结束事件
+     * @private
+     */
+    _onTouchEnd() {
+        if (this._isDragging || this._isPinching) {
+            this._isDragging = false;
+            this._isPinching = false;
+            this._lastTouchDistance = 0;
+            this._lastMouseActivityTime = Date.now() / 1000;
+            console.log('Touch end detected, resetting touch state');
+        }
+    }
+
+    /**
+     * 从当前相机位置同步控制器状态
+     */
+    syncFromCamera() {
+        this._needsStateSync = true;
+    }
+
+    /**
+     * 销毁时清理事件监听器
      * @private
      */
     _destroy() {
-        this._desktopInput.destroy();
-        this._orbitMobileInput.destroy();
-        this._flyMobileInput.destroy();
-        this._gamepadInput.destroy();
-
-        this._flyController.destroy();
-        this._orbitController.destroy();
+        const canvas = this.app.graphicsDevice.canvas;
+        canvas.removeEventListener('mousedown', this._onMouseDown);
+        canvas.removeEventListener('mousemove', this._onMouseMove);
+        window.removeEventListener('mouseup', this._onMouseUp);
+        canvas.removeEventListener('wheel', this._onMouseWheel);
+        canvas.removeEventListener('touchstart', this._onTouchStart);
+        canvas.removeEventListener('touchmove', this._onTouchMove);
+        canvas.removeEventListener('touchend', this._onTouchEnd);
     }
 
     /**
-     * @param {'orbit' | 'fly' | 'focus'} mode - The mode to set.
-     * @private
-     */
-    _setMode(mode) {
-        // override mode depending on enabled features
-        switch (true) {
-            case this.enableFly && !this.enableOrbit: {
-                mode = 'fly';
-                break;
-            }
-            case !this.enableFly && this.enableOrbit: {
-                mode = 'orbit';
-                break;
-            }
-            case !this.enableFly && !this.enableOrbit: {
-                console.warn('CameraControls: both fly and orbit modes are disabled');
-                return;
-            }
-        }
-
-        // check if mode is the same
-        if (this._mode === mode) {
-            return;
-        }
-        this._mode = mode;
-
-        // detach old controller
-        if (this._controller) {
-            this._controller.detach();
-        }
-
-        // attach new controller
-        switch (this._mode) {
-            case 'orbit': {
-                this._controller = this._orbitController;
-                break;
-            }
-            case 'fly': {
-                this._controller = this._flyController;
-                break;
-            }
-            case 'focus': {
-                this._controller = this._focusController;
-                break;
-            }
-        }
-        this._controller.attach(this._pose, false);
-    }
-
-    /**
-     * @param {Vec3} focus - The focus point.
-     * @param {boolean} [resetZoom] - Whether to reset the zoom.
-     */
-    focus(focus, resetZoom = false) {
-        this._setMode('focus');
-        const zoomDist = resetZoom ?
-            this._startZoomDist : this._camera.entity.getPosition().distance(focus);
-        const position = tmpV1.copy(this._camera.entity.forward)
-            .mulScalar(-zoomDist)
-            .add(focus);
-        this._controller.attach(pose.look(position, focus));
-    }
-
-    /**
-     * @param {Vec3} focus - The focus point.
-     * @param {boolean} [resetZoom] - Whether to reset the zoom.
-     */
-    look(focus, resetZoom = false) {
-        this._setMode('focus');
-        const position = resetZoom ?
-            tmpV1.copy(this._camera.entity.getPosition())
-                .sub(focus)
-                .normalize()
-                .mulScalar(this._startZoomDist)
-                .add(focus) : this._camera.entity.getPosition();
-        this._controller.attach(pose.look(position, focus));
-    }
-
-    /**
-     * @param {Vec3} focus - The focus point.
-     * @param {Vec3} position - The start point.
-     */
-    reset(focus, position) {
-        this._setMode('focus');
-        this._controller.attach(pose.look(position, focus));
-    }
-
-    /**
-     * @param {number} dt - The time delta.
+     * 更新 - 处理自动旋转和状态同步
+     * @param {number} dt - 时间增量
      */
     update(dt) {
-        const { keyCode } = KeyboardMouseSource;
+        const currentTime = Date.now() / 1000;
 
-        const { key, button, mouse, wheel } = this._desktopInput.read();
-        const { touch, pinch, count } = this._orbitMobileInput.read();
-        const { leftInput, rightInput } = this._flyMobileInput.read();
-        const { leftStick, rightStick } = this._gamepadInput.read();
-
-        // apply dead zone to gamepad sticks
-        applyDeadZone(leftStick, this.gamepadDeadZone.x, this.gamepadDeadZone.y);
-        applyDeadZone(rightStick, this.gamepadDeadZone.x, this.gamepadDeadZone.y);
-
-        // update state
-        this._state.axis.add(tmpV1.set(
-            (key[keyCode.D] - key[keyCode.A]) + (key[keyCode.RIGHT] - key[keyCode.LEFT]),
-            (key[keyCode.E] - key[keyCode.Q]),
-            (key[keyCode.W] - key[keyCode.S]) + (key[keyCode.UP] - key[keyCode.DOWN])
-        ));
-        for (let i = 0; i < this._state.mouse.length; i++) {
-            this._state.mouse[i] += button[i];
-        }
-        this._state.shift += key[keyCode.SHIFT];
-        this._state.ctrl += key[keyCode.CTRL];
-        this._state.touches += count[0];
-
-        if (button[0] === 1 || button[1] === 1 || wheel[0] !== 0) {
-            // left mouse button, middle mouse button, mouse wheel
-            this._setMode('orbit');
-        } else if (button[2] === 1 || this._state.axis.length() > 0) {
-            // right mouse button or any movement
-            this._setMode('fly');
+        // 检查是否需要同步状态
+        if (this._needsStateSync) {
+            this._updateControllerFromCamera();
+            this._needsStateSync = false;
+            console.log('Camera control state synchronized');
         }
 
-        const orbit = +(this._mode === 'orbit');
-        const fly = +(this._mode === 'fly');
-        const double = +(this._state.touches > 1);
-        const pan = +this.enablePan &&
-            ((orbit && this._state.shift) || this._state.mouse[1] || +(button[1] === -1));
-        const mobileJoystick = +(this._flyMobileInput.layout.endsWith('joystick'));
-
-        // multipliers
-        const moveMult = (this._state.shift ? this.moveFastSpeed : this._state.ctrl ?
-            this.moveSlowSpeed : this.moveSpeed) * this.sceneSize * dt;
-        const zoomMult = this.zoomSpeed * 60 * dt;
-        const zoomTouchMult = zoomMult * this.zoomPinchSens;
-        const rotateMult = this.rotateSpeed * 60 * dt;
-        const rotateJoystickMult = this.rotateSpeed * this.rotateJoystickSens * 60 * dt;
-
-        const { deltas } = frame;
-
-        // desktop move
-        const v = tmpV1.set(0, 0, 0);
-        const keyMove = this._state.axis.clone().normalize();
-        v.add(keyMove.mulScalar(fly * moveMult));
-        const panMove = screenToWorld(this._camera, mouse[0], mouse[1], this._pose.distance);
-        v.add(panMove.mulScalar(orbit * pan));
-        const wheelMove = new Vec3(0, 0, wheel[0]);
-        v.add(wheelMove.mulScalar(orbit * zoomMult));
-        deltas.move.append([v.x, v.y, v.z]);
-
-        // desktop rotate
-        v.set(0, 0, 0);
-        const mouseRotate = new Vec3(mouse[0], mouse[1], 0);
-        v.add(mouseRotate.mulScalar((1 - pan) * rotateMult));
-        deltas.rotate.append([v.x, v.y, v.z]);
-
-        // mobile move
-        v.set(0, 0, 0);
-        const flyMove = new Vec3(leftInput[0], 0, -leftInput[1]);
-        v.add(flyMove.mulScalar(fly * moveMult));
-        const orbitMove = screenToWorld(this._camera, touch[0], touch[1], this._pose.distance);
-        v.add(orbitMove.mulScalar(orbit * double));
-        const pinchMove = new Vec3(0, 0, pinch[0]);
-        v.add(pinchMove.mulScalar(orbit * double * zoomTouchMult));
-        deltas.move.append([v.x, v.y, v.z]);
-
-        // mobile rotate
-        v.set(0, 0, 0);
-        const orbitRotate = new Vec3(touch[0], touch[1], 0);
-        v.add(orbitRotate.mulScalar(orbit * (1 - double) * rotateMult));
-        const flyRotate = new Vec3(rightInput[0], rightInput[1], 0);
-        v.add(flyRotate.mulScalar(fly * (mobileJoystick ? rotateJoystickMult : rotateMult)));
-        deltas.rotate.append([v.x, v.y, v.z]);
-
-        // gamepad move
-        v.set(0, 0, 0);
-        const stickMove = new Vec3(leftStick[0], 0, -leftStick[1]);
-        v.add(stickMove.mulScalar(fly * moveMult));
-        deltas.move.append([v.x, v.y, v.z]);
-
-        // gamepad rotate
-        v.set(0, 0, 0);
-        const stickRotate = new Vec3(rightStick[0], rightStick[1], 0);
-        v.add(stickRotate.mulScalar(fly * rotateJoystickMult));
-        deltas.rotate.append([v.x, v.y, v.z]);
-
-        // check for skip update, just read frame to clear it
-        if (this.skipUpdate) {
-            frame.read();
-            return;
+        // 检查是否应该进入自动旋转模式
+        if (!this._autoRotate && !this._isDragging && currentTime - this._lastMouseActivityTime > this._autoRotateDelay) {
+            this._autoRotate = true;
+            this._isTransitioning = true; // 启动过渡动画
+            this._transitionTime = 0;
+            console.log('Entering auto-rotate mode with transition');
         }
 
-        // check if XR is active, just read frame to clear it
-        if (this.app.xr?.active) {
-            frame.read();
-            return;
+        // 执行自动旋转动画
+        if (this._autoRotate) {
+            this._performAutoRotate(dt);
         }
+    }
 
-        // check focus end
-        if (this._mode === 'focus') {
-            const focusInterrupt = deltas.move.length() + deltas.rotate.length() > 0;
-            const focusComplete = this._focusController.complete();
-            if (focusInterrupt || focusComplete) {
-                this._setMode('orbit');
-            }
+    /**
+     * 设置自动旋转延迟
+     * @param {number} delay - 延迟时间（秒）
+     */
+    setAutoRotateDelay(delay) {
+        this._autoRotateDelay = delay;
+    }
+
+    /**
+     * 设置自动旋转速度
+     * @param {number} speed - 旋转速度系数
+     */
+    setAutoRotateSpeed(speed) {
+        this._autoRotateSpeed = speed;
+    }
+
+    /**
+     * 手动切换自动旋转状态
+     * @param {boolean} autoRotate - 是否自动旋转
+     */
+    setAutoRotate(autoRotate) {
+        if (autoRotate && !this._autoRotate) {
+            this._isTransitioning = true;
+            this._transitionTime = 0;
+            console.log('Switching to auto-rotate with transition');
         }
+        this._autoRotate = autoRotate;
+    }
 
-        // update controller by consuming frame
-        this._pose.copy(this._controller.update(frame, dt));
-        this._camera.entity.setPosition(this._pose.position);
-        this._camera.entity.setEulerAngles(this._pose.angles);
+    /**
+     * 设置相机目标点
+     * @param {Vec3} target - 目标点坐标
+     */
+    setTarget(target) {
+        this._target.copy(target);
+        this._updateCameraFromController();
     }
 }
 
-export { CameraControls };
+export default CameraControls;

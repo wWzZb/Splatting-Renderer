@@ -6,7 +6,7 @@ import { createCamera } from './instance/camera.ts'
 import { createLight } from './instance/light.ts';
 import { createAssets } from './instance/asset.ts'
 //导入摄像头控制模块
-import { handleCameraTransition } from './controls/camera-animation.ts'
+import { handleCameraTransition, CameraTransitionState } from './controls/camera-animation.ts'
 // 导入状态管理
 import { initializeConfigFromUrl, appConfig } from './stores.ts';
 // 导入路由初始化函数
@@ -68,16 +68,9 @@ function initApp(config: any): pc.Application {
             // 设置天空盒
             setupSkybox(app, assets);
             // 设置相机
-            let scriptInstance: any = null;
             const initialPosition = new pc.Vec3(0, 6, 9);
-            const initialRotation = new pc.Vec3(-80, 0, 0);
-            const camera = createCamera(app, initialPosition, initialRotation);
-            // 将脚本添加到相机实体
-            camera.addComponent('script');
-            if (camera.script) {
-                scriptInstance = camera.script.create('cameraControls');
-            }
-            app.root.addChild(camera);
+            const initialRotation = new pc.Vec3(-15, 0, 0);
+            const { camera, cameraControls: scriptInstance } = createCamera(app, initialPosition, initialRotation);
 
             // 创建一个灯光
             const light = createLight(app);
@@ -85,27 +78,35 @@ function initApp(config: any): pc.Application {
             // 创建一个高斯喷溅实体
             const Cat = createSplatInstance(app, 'Toy Cat', assets.gsplat, 0, -1.5, 0, config.scale);
 
-            // 判断控制状态逻辑
-            let time = 0;
-            let autoRotate = true; // 自动转动标志
-            let lastMouseActivityTime = 0; // 上次鼠标活动时间
-            const autoRotateDelay = 5; // 自动转动延迟时间(秒)
-
+            scriptInstance.setTargetEntity(Cat);
             // 监听鼠标点击事件
             canvas.addEventListener('mousedown', () => {
-                autoRotate = false;
-                lastMouseActivityTime = time;
+
             });
 
             // 监听鼠标滚轮事件
             canvas.addEventListener('wheel', () => {
-                autoRotate = false;
-                lastMouseActivityTime = time;
+
             });
 
-            app.on('update', (dt) => {
-                time = handleCameraTransition(dt, time, autoRotate, lastMouseActivityTime, autoRotateDelay, camera, Cat, scriptInstance);
+            // 监听触摸事件
+            canvas.addEventListener('touchstart', (e) => {
+                e.preventDefault(); // 防止默认的触摸行为
+
             });
+
+            // 监听触摸移动事件
+            canvas.addEventListener('touchmove', (e) => {
+                e.preventDefault(); // 防止页面滚动
+
+            });
+
+            // 监听触摸结束事件
+            canvas.addEventListener('touchend', (e) => {
+                e.preventDefault();
+
+            });
+
         }
     });
 
