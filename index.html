@@ -2,7 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8">
+        <!-- 添加viewport元标签，这是移动设备响应式设计的关键 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
         <style>
+            /* 基础样式保持不变 */
             body { 
                 margin: 0; 
                 overflow: hidden; 
@@ -10,13 +13,26 @@
                 background: white;
                 color: black;
             }
+            /* 添加新的按钮容器样式 */
+            .buttons-container {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                padding-bottom: 12px;
+                background-color: transparent; /* 设置为完全透明 */
+            }
+            
             #container {
                 display: flex;
                 width: 100vw;
                 height: 100vh;
+                position: relative;
             }
 
-            /* 左侧面板样式 - 占满整个左侧页面 */
+            /* 桌面端左侧面板样式 */
             #left-panel {
                 flex: 1;
                 height: 100vh;
@@ -29,6 +45,7 @@
                 border-right: 1px solid #e0e0e0;
             }
             
+            /* 其他桌面端样式保持不变 */
             #right-panel {
                 flex: 3;
                 height: 100vh;
@@ -41,11 +58,11 @@
                 height: 100%;
             }
             
-            /* 资产信息容器样式 - 填充整个可用空间 */
+            /* 资产信息容器样式 - 桌面端 */
             #asset-info-container {
                 flex: 1;
                 background: white;
-                border: 1px solid #e0e0e0;
+                border: none;
                 padding: 20px;
                 display: flex;
                 flex-direction: column;
@@ -53,27 +70,28 @@
             
             #asset-name {
                 color: black;
-                font-size: 32px; /* 从24px增大到32px，使标题更大 */
+                font-size: 32px;
                 font-weight: 600;
                 margin: 0 0 16px 0;
                 padding-bottom: 12px;
                 border-bottom: 1px solid #e0e0e0;
             }
             
-            /* 资产描述样式 */
             #asset-description {
-                color: #666; /* 比上面的黑色(#333)更浅的颜色 */
+                color: #666;
                 font-size: 16px;
                 margin-bottom: 16px;
                 padding: 12px;
-                background-color: #f9f9f9;
-                border: 1px solid #e0e0e0;
+                background-color: white;
+                border: none;
                 flex-grow: 1;
-                text-indent: 2em; /* 添加2em的首行缩进 */
+                text-indent: 2em;
             }
             
-            /* 资产作者样式 */
-            #asset-author {
+            #asset-author,
+            #asset-studentid,
+            #asset-organization,
+            #asset-date {
                 color: #333;
                 font-size: 13px;
                 margin-bottom: 12px;
@@ -87,29 +105,9 @@
                 font-size: 16px;
             }
             
-            /* 资产组织样式 */
-            #asset-organization {
-                color: #333;
-                font-size: 13px;
-                margin-bottom: 12px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-            
             #asset-organization::before {
                 content: '🏢';
                 font-size: 16px;
-            }
-            
-            /* 资产日期样式 */
-            #asset-date {
-                color: #333;
-                font-size: 13px;
-                margin-bottom: 12px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
             }
             
             #asset-date::before {
@@ -117,34 +115,24 @@
                 font-size: 16px;
             }
 
-            #asset-studentid {
-                color: #333;
-                font-size: 13px;
-                margin-bottom: 12px;
-                display: flex;
-                align-items: center;
-                gap: 8px;
-            }
-
             #asset-studentid::before {
                 content: '🪪';
                 font-size: 16px;
             }
             
-            /* 按钮样式 */
             .action-button {
                 padding: 8px 16px;
                 background: white;
                 color: black;
-                border: 1px solid #e0e0e0;
+                border: none;
                 border-radius: 4px;
                 font-size: 16px;
                 cursor: pointer;
                 transition: all 0.3s ease;
                 margin-bottom: 20px;
                 align-self: flex-start;
-                width: auto; /* 自适应宽度 */
-                height: auto; /* 自适应高度 */
+                width: auto;
+                height: auto;
                 display: flex;
                 align-items: center;
                 justify-content: center;
@@ -156,12 +144,11 @@
                 transform: translateY(-1px);
             }
             
-            /* 收藏和技术支持信息容器 */
             #collection-info-container {
                 margin-top: 20px;
                 padding: 16px 20px;
                 background: white;
-                border: 1px solid #e0e0e0;
+                border: none;
                 color: black;
                 font-size: 14px;
                 line-height: 1.8;
@@ -174,36 +161,227 @@
             #collection-info-container div:last-child {
                 margin-bottom: 0;
             }
+
+            /* 展开按钮样式 */
+            #expand-button {
+                display: none; /* 默认隐藏，在移动端显示 */
+            }
+
+            /* 响应式设计 - 移动设备优化 */
+    @media screen and (max-width: 768px), (orientation: portrait) {
+        #container {
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+        
+        #right-panel {
+            flex: 1;
+            min-height: 20vh; /* 设置最小高度，确保不会完全消失 */
+            order: 1; /* 3D预览区域在上方 */
+            transition: flex 0.3s ease;
+        }
+        
+        /* 移动设备专用样式 - 悬浮卡片效果 */
+        #left-panel {
+            flex: 1;
+            max-height: 50vh;
+            padding: 16px;
+            border-right: none;
+            border-bottom: none;
+            overflow-y: auto;
+            order: 2; /* 信息区域在下方 */
+            background: #ffffff; /* 白色背景，增强卡片感 */
+            position: relative;
+            z-index: 10;
+            border-radius: 20px 20px 0 0; /* 顶部圆角 */
+            box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.1); /* 悬浮阴影效果 */
+            margin-top: -30px; /* 增加负值使面板向上移动更多 */
+            transition: height 0.3s ease, max-height 0.3s ease; /* 修改过渡效果为高度变化 */
+        }
+        
+        /* 展开状态样式 - 占据更大比例 */
+        #left-panel.expanded {
+            /* 移除向上移动效果，保持在默认位置 */
+            max-height: 75vh; /* 占据页面的3/4左右 */
+            height: 75vh;
+            margin-top: 0; /* 展开时移除上移效果 */
+        }
+        
+        /* 移动设备专用 - 返回按钮 */
+        #custom-action-btn {
+            position: static; /* 移除sticky定位，因为它现在由父容器控制 */
+            width: auto;
+            padding: 8px 16px !important;
+            font-size: 14px !important;
+            background: #ffffff !important;
+            border: 1px solid #e0e0e0 !important;
+            border-radius: 6px !important;
+            margin-bottom: 0 !important; /* 移除底部边距，因为父容器有padding */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            align-self: center;
+        }
+        
+        /* 移动设备专用 - 展开按钮 */
+        #expand-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 8px 16px;
+            background: #ffffff;
+            border: 1px solid #e0e0e0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 101;
+            position: static;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        #expand-button:hover {
+            background: #f8f9fa;
+            border-color: #007bff;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        #expand-button:active {
+            transform: translateY(0);
+        }
+        
+        .expand-text {
+            display: inline-block;
+            transition: opacity 0.3s ease;
+        }
+        
+        /* 展开状态下的按钮效果 */
+        #left-panel.expanded #expand-button {
+            background: #f0f8ff;
+            border-color: #007bff;
+        }
+        
+        #left-panel.expanded #expand-button .expand-icon {
+            transform: rotate(180deg);
+        }
+        
+        #left-panel.expanded #expand-button .expand-text {
+            content: "收起";
+        }
+        
+        /* 移动设备专用 - 资产信息容器 */
+        #asset-info-container {
+            padding: 12px 0;
+        }
+        
+        /* 移动设备专用 - 标题 */
+        #asset-name {
+            font-size: 28px !important;
+            font-weight: 700 !important;
+            line-height: 1.3 !important;
+            margin-bottom: 12px !important;
+            padding-bottom: 12px !important;
+        }
+        
+        /* 移动设备专用 - 描述文本 */
+        #asset-description {
+            font-size: 20px !important;
+            line-height: 1.6 !important;
+            margin-bottom: 16px !important;
+            padding: 12px 0 !important;
+            text-indent: 1.5em;
+            color: #333 !important;
+        }
+        
+        /* 移动设备专用 - 详细信息 */
+        #asset-author,
+        #asset-studentid,
+        #asset-organization,
+        #asset-date {
+            font-size: 18px !important;
+            margin-bottom: 16px !important;
+            padding: 8px 0;
+            line-height: 1.6;
+        }
+        
+        /* 移动设备专用 - 图标 */
+        #asset-author::before,
+        #asset-studentid::before,
+        #asset-organization::before,
+        #asset-date::before {
+            font-size: 20px !important;
+            margin-right: 8px;
+        }
+        
+        /* 移动设备专用 - 底部信息 */
+        #collection-info-container {
+            font-size: 16px !important;
+            padding: 16px !important;
+            margin-top: 16px !important;
+            background: #ffffff;
+            border-radius: 8px;
+            line-height: 1.6;
+            box-shadow: 0 -2px 4px rgba(0,0,0,0.05);
+        }
+    }
         </style>
         <script type="module" src="main.ts"></script>
+        <script>
+            // 实现展开/收起功能
+            document.addEventListener('DOMContentLoaded', function() {
+                const leftPanel = document.getElementById('left-panel');
+                const expandButton = document.getElementById('expand-button');
+                const expandText = document.querySelector('.expand-text');
+                const rightPanel = document.getElementById('right-panel');
+                
+                if (leftPanel && expandButton && expandText && rightPanel) {
+                    expandButton.addEventListener('click', function() {
+                        leftPanel.classList.toggle('expanded');
+                        
+                        // 更新按钮文字
+                        if (leftPanel.classList.contains('expanded')) {
+                            expandText.textContent = '收起';
+                            rightPanel.style.flex = '0 0 25vh'; // 右侧面板占据较小比例
+                        } else {
+                            expandText.textContent = '展开';
+                            rightPanel.style.flex = '0 0 50vh'; // 恢复默认高度
+                        }
+                    });
+                }
+            });
+        </script>
     </head>
     <body>
+        <!-- HTML结构 -->
         <div id="container">
-            <!-- 左侧面板 -->
+            <!-- HTML结构修改 -->
             <div id="left-panel">
-                <!-- 左侧内容 -->
-                 <!-- 添加按钮 -->
-                <button id="custom-action-btn" class="action-button">&lt; 返回</button>
-                <!-- 资产信息标签容器 -->
+                <!-- 创建一个固定在顶部的容器，包含两个按钮 -->
+                <div class="buttons-container">
+                    <button id="custom-action-btn" class="action-button">&lt; 返回</button>
+                    <button id="expand-button" title="展开信息面板">
+                        <span class="expand-text">展开</span>
+                    </button>
+                </div>
                 <div id="asset-info-container" style="margin-top: 0;">
+                    <!-- 其他内容保持不变 -->
                     <div id="asset-name"></div>
                     <div id="asset-description"></div>
-                    <div id="asset-author"></div><!-- 姓名 -->
-                    <div id="asset-studentid"></div><!-- 学号 -->
+                    <div id="asset-author"></div>
+                    <div id="asset-studentid"></div>
                     <div id="asset-organization"></div>
                     <div id="asset-date"></div>
                 </div>
-                <!-- 收藏和技术支持信息容器 -->
                 <div id="collection-info-container">
                     <div>由 档案馆 收藏物件、进行展示</div>
                     <div>由 人工智能创作坊 提供技术支持</div>
                 </div>
-            </div>            
-            <!-- 右侧面板 -->
+            </div>
             <div id="right-panel">
                 <canvas id='application'></canvas>
             </div>
         </div>
-        
     </body>
 </html>
