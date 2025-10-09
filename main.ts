@@ -12,7 +12,7 @@ import { initializeConfigFromUrl, appConfig } from './stores.ts';
 // 导入路由初始化函数
 import { initRouter } from './router.ts';
 
-
+import CameraControls from './controls/camera-controls.mjs';
 
 // 初始化配置
 initializeConfigFromUrl();

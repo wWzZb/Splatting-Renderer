@@ -3,7 +3,7 @@ import {
     Vec3
 } from 'playcanvas';
 
-/** @import { CameraComponent } from 'playcanvas' */
+
 
 /**
  * 相机控制器 - 集成手动控制和自动动画功能
