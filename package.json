@@ -1,0 +1,10 @@
+{
+  "type": "module",
+  "devDependencies": {
+    "playcanvas": "^2.11.4",
+    "vite": "^6.3.6"
+  },
+  "dependencies": {
+    "page": "^1.11.6"
+  }
+}
