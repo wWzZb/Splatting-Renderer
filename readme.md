@@ -1,7 +1,8 @@
 # 高斯喷溅查看器
 
 这是一个基于 PlayCanvas 的高斯喷溅查看器，支持添加资产、配置 skybox 以及设置资产信息。借助该工具，用户可以方便地展示和交互查看高斯喷溅模型，在现代浏览器中实现高质量的模型渲染效果。通过配置 `assets.json` 文件，能轻松管理模型、环境贴图等资源，还可进行多种交互操作来查看模型。
-![应用图片](https://github.com/wWzZb/Splatting-Renderer/tree/master/image.png)
+
+![应用图片](image.png)
 
 
 ## 安装与启动
