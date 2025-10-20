@@ -243,34 +243,7 @@
             background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
         }
 
-        /* 下学期模型背景图片 */
-        .semester-lower .cards-grid .model-link:nth-child(1) .card-top { background-image: url('thumbnails/1.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(2) .card-top { background-image: url('thumbnails/2.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(3) .card-top { background-image: url('thumbnails/3.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(4) .card-top { background-image: url('thumbnails/4.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(5) .card-top { background-image: url('thumbnails/5.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(6) .card-top { background-image: url('thumbnails/6.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(7) .card-top { background-image: url('thumbnails/7.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(8) .card-top { background-image: url('thumbnails/8.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(9) .card-top { background-image: url('thumbnails/9.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(10) .card-top { background-image: url('thumbnails/10.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(11) .card-top { background-image: url('thumbnails/1.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(12) .card-top { background-image: url('thumbnails/2.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(13) .card-top { background-image: url('thumbnails/3.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(14) .card-top { background-image: url('thumbnails/4.png'); }
-        .semester-lower .cards-grid .model-link:nth-child(15) .card-top { background-image: url('thumbnails/5.png'); }
-
-        /* 上学期模型背景图片 */
-        .semester-upper .cards-grid .model-link:nth-child(1) .card-top { background-image: url('thumbnails/6.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(2) .card-top { background-image: url('thumbnails/7.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(3) .card-top { background-image: url('thumbnails/8.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(4) .card-top { background-image: url('thumbnails/9.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(5) .card-top { background-image: url('thumbnails/10.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(6) .card-top { background-image: url('thumbnails/1.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(7) .card-top { background-image: url('thumbnails/2.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(8) .card-top { background-image: url('thumbnails/3.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(9) .card-top { background-image: url('thumbnails/4.png'); }
-        .semester-upper .cards-grid .model-link:nth-child(10) .card-top { background-image: url('thumbnails/5.png'); }
+        /* 背景图片现在通过JavaScript动态设置，不再需要硬编码的CSS规则 */
 
         .card-bottom {
             background-color: white;
@@ -365,264 +338,100 @@
         </div>
     </div>
     
-    <div class="year">2025 <span class="upper">下学期</span></div>
-    <div class="year-section semester-lower">
-        <div class="cards-grid">
-            <a href="/1" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 1</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
+    <!-- 动态渲染的学期容器 -->
+    <div id="semesters-container">
+        <!-- 学期内容将通过JavaScript动态生成 -->
                 </div>
-            </a>
-            
-            <a href="/2" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 2</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/3" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 3</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/4" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 4</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/5" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 5</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/6" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 6</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/7" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 7</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/8" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 8</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/9" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 9</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/10" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 10</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/11" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 11</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/12" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 12</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/13" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 13</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/14" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 14</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/15" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 15</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
-    
-    <div class="year">2025 <span class="lower">上学期</span></div>
-    <div class="year-section semester-upper">
-        <div class="cards-grid">
-            <a href="/1" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 1</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/2" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 2</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/3" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 3</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/4" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 4</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/5" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 5</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/6" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 6</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/7" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 7</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/8" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 8</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/9" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 9</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-            
-            <a href="/10" class="model-link">
-                <div class="card">
-                    <div class="card-top"></div>
-                    <div class="card-bottom">
-                        <div class="card-title">模型 10</div>
-                        <div class="card-description">厦门工学院档案馆</div>
-                    </div>
-                </div>
-            </a>
-        </div>
-    </div>
+
+    <script>
+        // 动态渲染学期内容
+        async function renderSemesters() {
+            try {
+                // 读取JSON配置文件
+                const response = await fetch('./config/projectcard.json');
+                const data = await response.json();
+                
+                const container = document.getElementById('semesters-container');
+                if (!container) {
+                    console.error('找不到semesters-container元素');
+                    return;
+                }
+                
+                // 清空容器
+                container.innerHTML = '';
+                
+                // 遍历每个学期
+                data.semesters.forEach(semester => {
+                    // 创建年份标题
+                    const yearElement = document.createElement('div');
+                    yearElement.className = 'year';
+                    yearElement.innerHTML = `${semester.year} <span class="${semester.semesterClass}">${semester.semester}</span>`;
+                    
+                    // 创建学期部分
+                    const sectionElement = document.createElement('div');
+                    sectionElement.className = `year-section ${semester.sectionClass}`;
+                    
+                    // 创建卡片网格
+                    const cardsGrid = document.createElement('div');
+                    cardsGrid.className = 'cards-grid';
+                    
+                    // 遍历模型创建卡片
+                    semester.models.forEach(model => {
+                        const modelLink = document.createElement('a');
+                        modelLink.href = model.href;
+                        modelLink.className = 'model-link';
+                        
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        
+                        const cardTop = document.createElement('div');
+                        cardTop.className = 'card-top';
+                        
+                        // 动态设置背景图片
+                        if (model.thumbnail) {
+                            cardTop.style.backgroundImage = `url('${model.thumbnail}')`;
+                        }
+                        
+                        const cardBottom = document.createElement('div');
+                        cardBottom.className = 'card-bottom';
+                        
+                        const cardTitle = document.createElement('div');
+                        cardTitle.className = 'card-title';
+                        cardTitle.textContent = model.title;
+                        
+                        const cardDescription = document.createElement('div');
+                        cardDescription.className = 'card-description';
+                        cardDescription.textContent = model.description;
+                        
+                        cardBottom.appendChild(cardTitle);
+                        cardBottom.appendChild(cardDescription);
+                        card.appendChild(cardTop);
+                        card.appendChild(cardBottom);
+                        modelLink.appendChild(card);
+                        cardsGrid.appendChild(modelLink);
+                    });
+                    
+                    sectionElement.appendChild(cardsGrid);
+                    
+                    // 添加到容器
+                    container.appendChild(yearElement);
+                    container.appendChild(sectionElement);
+                });
+                
+                console.log('学期内容渲染完成');
+                
+            } catch (error) {
+                console.error('加载学期配置失败:', error);
+                // 显示错误信息
+                const container = document.getElementById('semesters-container');
+                if (container) {
+                    container.innerHTML = '<div style="text-align: center; padding: 20px; color: #666;">加载学期信息失败，请刷新页面重试</div>';
+                }
+            }
+        }
+        
+        // 页面加载完成后执行
+        document.addEventListener('DOMContentLoaded', renderSemesters);
+    </script>
 </body>
 </html>

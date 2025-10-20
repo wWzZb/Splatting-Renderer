@@ -1,0 +1,230 @@
+{
+  "semesters": [
+    {
+      "year": 2025,
+      "semester": "下学期",
+      "semesterClass": "upper",
+      "sectionClass": "semester-lower",
+      "models": [
+        {
+          "id": 1,
+          "title": "模型 1",
+          "description": "厦门工学院档案馆",
+          "href": "/1",
+          "thumbnail": "thumbnails/1.png"
+        },
+        {
+          "id": 2,
+          "title": "模型 2",
+          "description": "厦门工学院档案馆",
+          "href": "/2",
+          "thumbnail": "thumbnails/2.png"
+        },
+        {
+          "id": 3,
+          "title": "模型 3",
+          "description": "厦门工学院档案馆",
+          "href": "/3",
+          "thumbnail": "thumbnails/3.png"
+        },
+        {
+          "id": 4,
+          "title": "模型 4",
+          "description": "厦门工学院档案馆",
+          "href": "/4",
+          "thumbnail": "thumbnails/4.png"
+        },
+        {
+          "id": 5,
+          "title": "模型 5",
+          "description": "厦门工学院档案馆",
+          "href": "/5",
+          "thumbnail": "thumbnails/5.png"
+        },
+        {
+          "id": 6,
+          "title": "模型 6",
+          "description": "厦门工学院档案馆",
+          "href": "/6",
+          "thumbnail": "thumbnails/6.png"
+        },
+        {
+          "id": 7,
+          "title": "模型 7",
+          "description": "厦门工学院档案馆",
+          "href": "/7",
+          "thumbnail": "thumbnails/7.png"
+        },
+        {
+          "id": 8,
+          "title": "模型 8",
+          "description": "厦门工学院档案馆",
+          "href": "/8",
+          "thumbnail": "thumbnails/8.png"
+        },
+        {
+          "id": 9,
+          "title": "模型 9",
+          "description": "厦门工学院档案馆",
+          "href": "/9",
+          "thumbnail": "thumbnails/9.png"
+        },
+        {
+          "id": 10,
+          "title": "模型 10",
+          "description": "厦门工学院档案馆",
+          "href": "/10",
+          "thumbnail": "thumbnails/10.png"
+        },
+        {
+          "id": 11,
+          "title": "模型 11",
+          "description": "厦门工学院档案馆",
+          "href": "/11",
+          "thumbnail": "thumbnails/1.png"
+        },
+        {
+          "id": 12,
+          "title": "模型 12",
+          "description": "厦门工学院档案馆",
+          "href": "/12",
+          "thumbnail": "thumbnails/2.png"
+        },
+        {
+          "id": 13,
+          "title": "模型 13",
+          "description": "厦门工学院档案馆",
+          "href": "/13",
+          "thumbnail": "thumbnails/3.png"
+        },
+        {
+          "id": 14,
+          "title": "模型 14",
+          "description": "厦门工学院档案馆",
+          "href": "/14",
+          "thumbnail": "thumbnails/4.png"
+        },
+        {
+          "id": 15,
+          "title": "模型 15",
+          "description": "厦门工学院档案馆",
+          "href": "/15",
+          "thumbnail": "thumbnails/5.png"
+        }
+      ]
+    },
+    {
+      "year": 2025,
+      "semester": "上学期",
+      "semesterClass": "lower",
+      "sectionClass": "semester-upper",
+      "models": [
+        {
+          "id": 1,
+          "title": "模型 1",
+          "description": "厦门工学院档案馆",
+          "href": "/1",
+          "thumbnail": "thumbnails/6.png"
+        },
+        {
+          "id": 2,
+          "title": "模型 2",
+          "description": "厦门工学院档案馆",
+          "href": "/2",
+          "thumbnail": "thumbnails/7.png"
+        },
+        {
+          "id": 3,
+          "title": "模型 3",
+          "description": "厦门工学院档案馆",
+          "href": "/3",
+          "thumbnail": "thumbnails/8.png"
+        },
+        {
+          "id": 4,
+          "title": "模型 4",
+          "description": "厦门工学院档案馆",
+          "href": "/4",
+          "thumbnail": "thumbnails/9.png"
+        },
+        {
+          "id": 5,
+          "title": "模型 5",
+          "description": "厦门工学院档案馆",
+          "href": "/5",
+          "thumbnail": "thumbnails/10.png"
+        },
+        {
+          "id": 6,
+          "title": "模型 6",
+          "description": "厦门工学院档案馆",
+          "href": "/6",
+          "thumbnail": "thumbnails/1.png"
+        },
+        {
+          "id": 7,
+          "title": "模型 7",
+          "description": "厦门工学院档案馆",
+          "href": "/7",
+          "thumbnail": "thumbnails/2.png"
+        },
+        {
+          "id": 8,
+          "title": "模型 8",
+          "description": "厦门工学院档案馆",
+          "href": "/8",
+          "thumbnail": "thumbnails/3.png"
+        },
+        {
+          "id": 9,
+          "title": "模型 9",
+          "description": "厦门工学院档案馆",
+          "href": "/9",
+          "thumbnail": "thumbnails/4.png"
+        },
+        {
+          "id": 10,
+          "title": "模型 10",
+          "description": "厦门工学院档案馆",
+          "href": "/10",
+          "thumbnail": "thumbnails/5.png"
+        },
+        {
+          "id": 11,
+          "title": "模型 11",
+          "description": "厦门工学院档案馆",
+          "href": "/11",
+          "thumbnail": "thumbnails/6.png"
+        },
+        {
+          "id": 12,
+          "title": "模型 12",
+          "description": "厦门工学院档案馆",
+          "href": "/12",
+          "thumbnail": "thumbnails/7.png"
+        },
+        {
+          "id": 13,
+          "title": "模型 13",
+          "description": "厦门工学院档案馆",
+          "href": "/13",
+          "thumbnail": "thumbnails/8.png"
+        },
+        {
+          "id": 14,
+          "title": "模型 14",
+          "description": "厦门工学院档案馆",
+          "href": "/14",
+          "thumbnail": "thumbnails/9.png"
+        },
+        {
+          "id": 15,
+          "title": "模型 15",
+          "description": "厦门工学院档案馆",
+          "href": "/15",
+          "thumbnail": "thumbnails/10.png"
+        }
+      ]
+    }
+  ]
+}

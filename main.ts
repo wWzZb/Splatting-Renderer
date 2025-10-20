@@ -21,7 +21,10 @@ initializeConfigFromUrl();
 initRouter();
 
 // 初始化PlayCanvas应用
-const app = initApp(appConfig);
+initApp(appConfig);
+
+
+
 
 
 
@@ -45,12 +48,32 @@ function initApp(config: any): pc.Application {
     app.setCanvasFillMode(pc.FILLMODE_NONE);
 
     updateAssetInfoDisplay(config);
+    // 显示加载动画
+    showLoadingAnimation();
+    
+    // 初始化进度显示
+    updateLoadingProgress(0);
+
     // 加载资产
     const assets = createAssets(
         config.gsplatUrl,  // 模型路径
         config.skyboxUrl   // 环境贴图路径
     );
     const assetListLoader = new pc.AssetListLoader(Object.values(assets), app.assets);
+    
+    // 监听加载进度 - 使用正确的事件监听方式
+    let loadedCount = 0;
+    const totalAssets = Object.keys(assets).length;
+    
+    // 为每个资产添加加载完成监听
+    Object.values(assets).forEach((asset) => {
+        asset.on('load', () => {
+            loadedCount++;
+            const progress = loadedCount / totalAssets;
+            updateLoadingProgress(progress);
+        });
+    });
+    
     // 确保资产加载完成
     assetListLoader.load((err, failed) => {
         if (err) {
@@ -63,6 +86,10 @@ function initApp(config: any): pc.Application {
             }
         } else {
             console.log(`${Object.keys(assets).length} assets loaded`);
+            
+            // 隐藏加载动画
+            hideLoadingAnimation();
+            
             app.start();
 
             // 设置天空盒
@@ -164,6 +191,53 @@ function updateAssetInfoDisplay(config: any): void {
         if (config.additionalInfo.organization) {
             //显示单位信息
             organizationElement.textContent = `单位: ${config.additionalInfo.organization || '未知'}`;
+        }
+    }
+}
+
+/**
+ * 显示加载动画
+ */
+function showLoadingAnimation(): void {
+    const loadingContainer = document.getElementById('loading-container');
+    if (loadingContainer) {
+        loadingContainer.classList.remove('hidden');
+    }
+}
+
+/**
+ * 隐藏加载动画
+ */
+function hideLoadingAnimation(): void {
+    const loadingContainer = document.getElementById('loading-container');
+    if (loadingContainer) {
+        loadingContainer.classList.add('hidden');
+        // 延迟移除元素，等待动画完成
+        setTimeout(() => {
+            if (loadingContainer.parentNode) {
+                loadingContainer.parentNode.removeChild(loadingContainer);
+            }
+        }, 500);
+    }
+}
+
+/**
+ * 更新加载进度
+ * @param progress 加载进度 (0-1)
+ */
+function updateLoadingProgress(progress: number): void {
+    const progressElement = document.getElementById('loading-progress');
+    if (progressElement) {
+        const percentage = Math.round(progress * 100);
+        progressElement.textContent = `加载进度: ${percentage}%`;
+        
+        // 添加更详细的加载状态
+        if (progress === 0) {
+            progressElement.textContent = '准备加载资源...';
+        } else if (progress < 1) {
+            progressElement.textContent = `正在加载资源... ${percentage}%`;
+        } else {
+            progressElement.textContent = '资源加载完成，正在初始化...';
         }
     }
 }
