@@ -188,41 +188,6 @@
           "description": "厦门工学院档案馆",
           "href": "/10",
           "thumbnail": "thumbnails/5.png"
-        },
-        {
-          "id": 11,
-          "title": "模型 11",
-          "description": "厦门工学院档案馆",
-          "href": "/11",
-          "thumbnail": "thumbnails/6.png"
-        },
-        {
-          "id": 12,
-          "title": "模型 12",
-          "description": "厦门工学院档案馆",
-          "href": "/12",
-          "thumbnail": "thumbnails/7.png"
-        },
-        {
-          "id": 13,
-          "title": "模型 13",
-          "description": "厦门工学院档案馆",
-          "href": "/13",
-          "thumbnail": "thumbnails/8.png"
-        },
-        {
-          "id": 14,
-          "title": "模型 14",
-          "description": "厦门工学院档案馆",
-          "href": "/14",
-          "thumbnail": "thumbnails/9.png"
-        },
-        {
-          "id": 15,
-          "title": "模型 15",
-          "description": "厦门工学院档案馆",
-          "href": "/15",
-          "thumbnail": "thumbnails/10.png"
         }
       ]
     }

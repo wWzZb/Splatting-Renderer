@@ -37,15 +37,13 @@ export function initRouter() {
 function handleRouteChange(path: string, assetId: number) {
     // 从URL参数中获取当前资产ID
     const urlParams = new URLSearchParams(window.location.search);
-    const currentAssetId = urlParams.get('assetId') || '1';
+    const currentAssetId = urlParams.get('assetId');
 
     // 只有当资产ID不同时才刷新页面
     if (currentAssetId !== assetId.toString()) {
         // 构建新的URL，包含资产ID参数
         let newUrl = path;
-        if (assetId !== 1) {
-            newUrl += `?assetId=${assetId}`;
-        }
+        newUrl += `?assetId=${assetId}`;
 
         // 使用replaceState更新URL，然后刷新页面
         window.history.replaceState({}, '', newUrl);

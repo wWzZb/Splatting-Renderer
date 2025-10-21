@@ -1,4 +1,7 @@
 import * as pc from 'playcanvas';
+// 让资产脚本（经典 pc.createScript）可访问全局 pc
+// @ts-ignore
+(window as any).pc = pc;
 // 导入所需的函数
 import { setupSkybox } from './instance/sky.ts';
 import { createSplatInstance } from './instance/gsplat.ts'
@@ -6,13 +9,12 @@ import { createCamera } from './instance/camera.ts'
 import { createLight } from './instance/light.ts';
 import { createAssets } from './instance/asset.ts'
 //导入摄像头控制模块
-import { handleCameraTransition, CameraTransitionState } from './controls/camera-animation.ts'
+
 // 导入状态管理
 import { initializeConfigFromUrl, appConfig } from './stores.ts';
 // 导入路由初始化函数
 import { initRouter } from './router.ts';
 
-import CameraControls from './controls/camera-controls.mjs';
 
 // 初始化配置
 initializeConfigFromUrl();
